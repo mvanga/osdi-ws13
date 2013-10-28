@@ -1,0 +1,36 @@
+\section{From unicore to multicore}
+
+In recent decades, we saw the development of more powerful
+unicore processors, with higher clock rates and more
+aggressive instruction level reordering. This yieled
+significant performance gains. This trend is no longer
+tenable, as exemplified by the scrapping of Intel's
+XXXX processor, a DESCRIBE HERE. We identify
+four main reasons. The increasing complexity
+of design and associated with deeper pipelines,
+complex branch prediction logic and instruction
+reordering has caused both static and dynamic power consumption
+to become intolerably high. Modern uniprocessors have hit
+a power wall where any further improvement would come
+with too high a power cost. Secondly, clock rates on
+a single core are close to reaching fundamental hardware limits,
+with wire delays and clock skew dominating within a single clock cycle.
+Further improvements in clock frequency are thus unlikely. Thirdly, the most
+complex uniprocessors exploit speculation and instruction reordering so
+extensively that there is little instruction level parallelism left to
+exploit. These hurdles, combined with advances in sillicon which allows
+for multiple cores to be placed on a single die (FIND EXACT CITATION)
+have induced a significant paradigm shift: new processors now contain
+more cores of equal (or reduced) complexity. Multiple simpler cores
+instead of a highly complex one help reduce or limit power consumption,
+provide decides which are simpler to verify, and allows processors
+to explore other sources of parallelism, namely thread level parallelism (CITE)
+and data level parallelism (CITE).
+
+The move to many/multicore was made out of necessity. In this abstract, we begin
+by giving a brief overview of modern multi/manycore architectures and highlight
+the challenges associated with such a significant paradigm shifts. We subsequently
+outline REPHRASE what we believe are the main questions associated with 
+adapting to manycore
+
+
