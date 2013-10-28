@@ -5,6 +5,25 @@ We now provide a brief overview of multi-core and many-core architectures and
 highlight the common trends that are prevailant in commercial off-the-shelf
 (\emph{COTS}) hardware.
 
+\subsection{This was originally in intro}
+The Cell BE architecture, Tile and Intel's Sandy Bridge processors
+strike different points in the design space of many/multi-core architectures.
+The Sandy Bridge processor provides a small number (8) of powerful complex cores,
+with deep pipelines and aggressive instruction reordering. Serial performance
+remains a priority. The Tilera architecture, by contrast, presents a large number
+of identical cores organised as tiles on top of a mesh interconnect with non-uniform
+access time. The main challenges with this architecture are three fold:
+identifying applications which have sufficient degrees of thread or data level
+parallelism to leverage these cores, with each core being simple, guaranteeing
+good performance of the serial part of each application, and finally, managing the 
+non uniformity of interconnect and memory latency. This architecture
+contrasts with the CELL BE unit which explicitly chooses to have multiple
+heterogeneous cores with different processing capabilities and non-compatible ISA
+(check if that's true). This addresses the problem of worrying about the serial
+performance of the app, it can just be run on the powerful core. It introduces
+significant programming complexity though in that heterogeinity must be managed
+by the programmer and carefully understood.
+
 \subsection{Massive Parallelism}
 
 - Offer lots of cores
@@ -22,3 +41,9 @@ highlight the common trends that are prevailant in commercial off-the-shelf
 - Multi-level memory hierarchies help mask access latencies
 - Now with the added complexity that they need to be consistent
 - Is memory consistency an inherent requirement? Can it be discarded entirely?
+
+
+
+Other point: knowledge of the internal topology of the system is
+now very important (ex: even with interconnects, accessing
+drivers will have non uniform access time)
