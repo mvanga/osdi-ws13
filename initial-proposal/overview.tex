@@ -1,95 +1,43 @@
 \section{Multi/Many-Core Architectures}
 \label{sec:overview}
+In this abstract, we distinguish the notions of multi- and many-core
+architectures acording to the following definition~\cite{Re:12}:
+\emph{multi-core} systems can be thought of as the iterative squeezing of powerful
+ single-core chips that
+were developed till around 2005 onto a single chip. Examples include the
+ Intel Sandy Bridge line of processors which directly use previously developed chips
+and add additional functionality needed for supporting multiple cores. This
+contrasts with \emph{many-core} architectures, which are built from the ground up 
+to support massive parallelism at the cost of slower processor speeds,
+with a large number of fairly simple cores.  Examples include
+the new Intel Xeon processors and the Tilera line of massively parallel proecssors.
+These represent a significant paradigm shift over previous designs.
 
-Before discussing the architectural considerations of multi- and many-core
-architectures, we must first clarify what exactly these terms mean and how they
-differ. When defining these terms, we refer to the definition given by James Reinders,
-director of software products at Intel \cite{Re:12}. In essence, \emph{multi-core} systems
-can be thought of as the iterative squeezing of powerful single-core chips that
-were developed till around 2005 onto a single chip. Examples of these include the Intel
-Sandy Bridge line of processors which directly use previously developed chips
-and add additional functionality needed for supporting multiple cores. On the other hand, 
-\emph{many-core} systems are those that are built from the ground up to support massive
-parallelism at the cost of slower processor speeds. This allows for a radical shift in the
-design approach and leads to a large number of less-powerful chips that support highly
-parallel applications. Examples of this approach include the newer Intel Xeon processors
-and the Tilera line of massively parallel processors. In effect, the difference between
-multi-core and many-core boils down to having a handful of powerful cores or a massive
-number of less-powerful cores.
-
-We now provide a brief overview of multi-core and many-core architectures and
-highlight the common trends that are prevalent in commercial off-the-shelf
-(\emph{COTS}) hardware.
-
-\subsection{Massive Parallelism}
-
-A common trait of all modern multi-core architectures is having a large number of cores on a
-single chip that provide a large amount of parallelism. However, we are still in the nascent
-stage of coming to grips with parallel programming and still have trouble understanding the
-tradeoffs involved. Particularly when combined with newly introduced bottlenecks such as
-interconnection link congestion and interconnect bandwidth limits. Many parallel programming 
-models have been proposed [CITE] however no clear winner seems to have been agreed upon
-by the community at large.
-
-\subsection{Interconnection Links}
-
-Since processors need some way of communicating with each other, there has been a push
-towards performant interconnection networks. The \emph{Intel QuickPath Interconnect} (QPI) and 
-Intel's HyperTransport technology are just two example of the vast variety of interconnects
-being researched. The breadth of this area spans from network-on-chips to optical interconnects.
-With regard to software, in particular, it is still unclear how to efficiently use the limited bandwidth
-of this interconnects so that performance is maximized (for whatever definition of performance we
-choose). This would come in the form of better algorithms that are aware of these limits and
-adaptively optimize for performance.
-
-\subsection{Shared Memory and Memory Hierarchies}
-
-Memory hierarchies are a tried and tested way of masking the access latencies of memory in machines.
-These hierarchies, which were already complex in the single-core era, have only gained in complexity
-with the introduction of multi-core systems. In particular, sharing of second- and third-level caches makes
-it hard to reason about the access latency of a particular piece of memory since it may be affected by the
-interference on the other cores. While this interference has largely been solved by cache-partitioning
-approaches, this approach inherently partitions regardless of actual usage, making it inherently pessimistic.
-It may be interesting to see as to whether these can be adaptively partitioned during runtime based on
-performance metrics.
-
-There is another common trend in modern multi- and many-core architectures: shared memory. While there
-has been a recent push from the community towards shared-nothing software architectures [CITE], the
-advantages of shared memory, in particular with regard to reasoning about consistency, remain strong.
-Thus, modern architectures all provide varying degrees of memory consistency for shared memory between
-cores. This is done using hardware cache-coherency protocols that invalidate entries in accordance with
-reads and writes by cores to shared memory locations.
-
-An interesting question to consider and research is as to whether memory consistency is an inherent
-requirement for supporting shared memory or whether applications can employ techniques from
-distributed systems literature [CITE] to discard hardware-level consistency and make do with
-inconsistent memory that is synchronized using application-dependent protocols.
-
-%However, although this parallelism is
-%now available to be exploited, other bottlenecks have been created (\eg interconnect
-%congestion and interconnect bandwidth limits). It is thus unclear as to what is the best
-%approach to exploit this parallelism. That is, it is unclear what the tradeoffs 
-
-\paragraph{Summary.} Along with all these similarities come to permutations of different feature sets
-and varieties leading to a vast range of diversity in commercial multi- and many-core offerings. Examples
-such as the Cell BE, Tilera and Intel's Sandy Bridge processors strike different points in the design space
-of many/multi-core architectures. For example, the Sandy Bridge processor provides a small number (8)
-of powerful complex cores, with deep pipelines and aggressive instruction reordering. Serial performance
-remains a priority. The Tilera architecture, by contrast, presents a large number of identical cores organized
-as tiles on top of a mesh interconnect with non-uniform access time.
-
-%The main challenges with this
-%architecture are three fold: identifying applications which have sufficient degrees of thread or data level
-%parallelism to leverage these cores, with each core being simple, guaranteeing
-%good performance of the serial part of each application, and finally, managing the 
-%non uniformity of interconnect and memory latency. This architecture
-%contrasts with the CELL BE unit which explicitly chooses to have multiple
-%heterogeneous cores with different processing capabilities and non-compatible ISA
-%(check if that's true). This addresses the problem of worrying about the serial
-%performance of the app, it can just be run on the powerful core. It introduces
-%significant programming complexity though in that heterogeneity must be managed
-%by the programmer and carefully understood.
-
-%Other point: knowledge of the internal topology of the system is
-%now very important (ex: even with interconnects, accessing
-%drivers will have non uniform access time)
+We highlight various architectural designs present in commercial off-the-shelf
+(\emph{COTS}) hardware. These represent particular points in a large design
+spaces.
+\begin{itemize}
+\item {\bf Number of Cores - Parallelism} Different architectures effect a tradeoff between the
+number of cores and the simplicity of each core. Designs with fewer,
+more complex cores optimise for serial performance (Intel Sandy Bridge)
+whereas large number of simple cores are explicitly geared towards
+optimising thread-level and data-level parallelism.
+\item {\bf Heterogeineity} In seeking to strike a balance between parallel and
+serial performance, existing processor designs combine multiple CPU cores with
+different physical characteristics, optimised for different tasks. The many-core
+Cell BE thus combines 2 distict kinds of processors with different ISAs, by
+contrast Tilera only considers identical cores.
+\item {\bf Interconnection Links} The large majority of uniprocessor systems
+used a ring-based interconnect. This is often no longer appropriate for
+multi-/many-core systems due to interconnects having often become a bottleneck,
+and the prohibitive delay induced by wires. New interconnect designs are being researched,
+such as \emph{Intel QuickPath Interconnect} (QPI) and  Intel's HyperTransport technology.
+Many modern systems are opting for ring-based, mesh and crossbar topologies.
+\item {\bf Memory} The large majority of multi-/many-core systems prove
+non-uniform access time to memory, distinguishing between local and remote
+memory [CITE]. The memory hierarchy is increasingly complex.
+Furthermore, synchronisation and maintaining strong memory consistency across
+cors and layers is a significant challenge. As it stands, most modern
+design continue to share memory, though there has been a recent push
+towards shared-nothing software architecture. [CITE]
+\end{itemize}
