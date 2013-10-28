@@ -1,0 +1,27 @@
+\section{Challenges for Software}
+\label{sec:challenges}
+
+Software for multi- and many-core architectures faces many challeneges.
+
+\subsection{Efficient Allocation of Resources}
+
+- Scheduling seems simpler given a large enough number of cores and less than
+full utilization of system resources.
+- Can cores be allocated to applications? Space-wise scaling of the OS. What
+about optimizing for power consumption or fairness?
+
+\subsection{Heterogeneity}
+
+- ISA level, performance level and memory level
+- How does software deal with this heterogeneity?
+- Do we gain anything from this or is it something we must "cope with"?
+
+\subsection{Abstractions}
+
+- Are current OS abstractions still valid for these architectures?
+- Do we need to rethink anything? For example, considering a hierarchical memory
+space based on access latencies? Extend or get rid of the concept of processes?
+
+\paragraph{Summary}
+The key problem seems to be in understanding the tradeoffs that such architectures
+provide. Also need to consider the new bottlenecks in these designs.
