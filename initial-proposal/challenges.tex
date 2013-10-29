@@ -9,15 +9,15 @@ challenges along three directions.
 
 Resource allocation is one of the primary roles of the operating system. The infusion of a
 large number of cores makes the job of the OS harder. In particular, the decision making
-becomes harder as constraints such as minimizing power consumption and fairness of allocation
-are introduced. That is, the resource utilization is not linear in the number of cores due to
-inefficient decision making.
+is complicated as constraints such as minimizing power consumption and fairness of allocation
+are introduced. That is, the resource utilization becomes non-linear in the number of cores due to
+inefficient decision making at the software level.
 
 \paragraph{Non-Uniformity and Heterogeneity}
 
 Due to the increasing physical distance between cores in multi-core architectures, memory
-access latency is non-uniform across cores. In addition, interconnect bandwidth limits
-introduce additional non-uniformity due to interferance from other cores.
+access latency is non-uniform across cores and interconnect bandwidth limits
+introduce additional non-uniformity due to interference from other cores.
 
 In addition, ISA-level and performance variations across cores introduce a level of
 heterogeneity into the system. It is unclear what the tradeoffs are with this added
