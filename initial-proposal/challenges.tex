@@ -1,65 +1,55 @@
 \section{Challenges for Software}
 \label{sec:challenges}
 
-Software for multi- and many-core architectures faces many challeneges.
-NATACHA: what do you mean by software here? applications or OS? Should we not
-clearly separate out the two?
+The vast variety of multi- and many-core architectures available pose many challenges for
+software (both at the operating system and application level). We wish to explore these
+challenges along three directions.
 
-\subsection{Efficient Allocation of Resources}
+\paragraph{Efficient Allocation of Resources}
 
-- Scheduling seems simpler given a large enough number of cores and less than
-full utilization of system resources.
-- Can cores be allocated to applications? Space-wise scaling of the OS. What
-about optimizing for power consumption or fairness?
-- symmetric scheduling  or asymmetric scheduling?
-- if opt for a design with very high number of very simple cores, how can we
-guarantee good serial performance (Ahmdahl's law)
+Resource allocation is one of the primary roles of the operating system. The infusion of a
+large number of cores makes the job of the OS harder. In particular, the decision making
+becomes harder as constraints such as minimizing power consumption and fairness of allocation
+are introduced. That is, the resource utilization is not linear in the number of cores due to
+inefficient decision making.
 
-\subsection{Non-Uniformity}
-- Non-uniformity in terms of memory accesses
-- Non-uniformity in terms of interconnects and therefore
-in associated time to communicate with appropriate devices
+\paragraph{Non-Uniformity and Heterogeneity}
 
-\subsection{Heterogeneity}
+Due to the increasing physical distance between cores in multi-core architectures, memory
+access latency is non-uniform across cores. In addition, interconnect bandwidth limits
+introduce additional non-uniformity due to interferance from other cores.
 
-- ISA level, performance level and memory level
-- How does software deal with this heterogeneity?
-- How can we model and represent that heterogeneity efficiently?
-- How much should we expose and at what level?
-- Do we gain anything from this or is it something we must "cope with"?
+In addition, ISA-level and performance variations across cores introduce a level of
+heterogeneity into the system. It is unclear what the tradeoffs are with this added
+heterogeneity it is unclear how to best exploit this at the operating system level. How
+should this heterogeneity be abstracted? How much of it should be exposed to user
+applications?
 
-\subsection{OS Abstractions}
+\paragraph{OS Abstractions}
 
-- Are current OS abstractions still valid for these architectures?
-- Do we need to rethink anything? For example, considering a hierarchical memory
-space based on access latencies? Extend or get rid of the concept of processes?
-- Number of OSes investigate this Barrelfish, Helios, Tesselation, Corey, fOs. What
-are the common trends, where do they fall short?
+With the addition of these complexities, a question that is valid is whether state-of-the-art
+OS structure and abstractions are still applicable and whether they can be better designed.
+A number of research OSes investigate this Barrelfish, Helios, Tesselation, Corey, fOs.
+What are the common trends and where can they be improved?
 
-\subsection{Applications}
-- How should we design, as programmers, applications for multi/many core systems.
-- Can't expect good serial performance. How do we change? 
+%- Are current OS abstractions still valid for these architectures?
+%- Do we need to rethink anything? For example, considering a hierarchical memory
+%space based on access latencies? Extend or get rid of the concept of processes?
 
-\paragraph{Summary}
-The key problem seems to be in understanding the tradeoffs that such architectures
-provide. Also need to consider the new bottlenecks in these designs.
-
-
-Other points that I can think of:
-- key issue that arises in multicore architecture
-is the sharing of resources which wasn't there previously
-That can come up in the form of sharing global datastructures
-(page tables, etc.), interference (TLB shootdown, cache pollution)
-to physical resources (interconnect bottlenecks).
-- Make the claim that whereas previously memory latency was the
-problem, memory bandwidth is now a bigger issue (The ASPLOS
-paper makes that point well)
-- Amdhal's law states that any parallel speedup is limited by
-the serial performance of the application, how do we guarantee
-good serial performance if we only have very simple cores.
-- Applications. (this is linked to abstractions, maybe?) How do
-we design applications which are highly parallel, sufficiently
-so that they can be run on a large number of cores efficiently,
-or alternatively, what techniques can we use to
-implicitly parallelise such applications to be able to make them
-run on multiple cores (speculation comes in to play here)
+%- key issue that arises in multicore architecture
+%is the sharing of resources which wasn't there previously
+%That can come up in the form of sharing global datastructures
+%(page tables, etc.), interference (TLB shootdown, cache pollution)
+%to physical resources (interconnect bottlenecks).
+%- Make the claim that whereas previously memory latency was the
+%problem, memory bandwidth is now a bigger issue (The ASPLOS
+%paper makes that point well)
+%- Amdhal's law states that any parallel speedup is limited by
+%the serial performance of the application, how do we guarantee
+%good serial performance if we only have very simple cores.
+%- Applications. (this is linked to abstractions, maybe?) How do
+%we design applications which are highly parallel, sufficiently
+%so that they can be run on a large number of cores efficiently,
+%or alternatively, what techniques can we use to
+%implicitly parallelise such applications to be able to make them
+%run on multiple cores (speculation comes in to play here)
