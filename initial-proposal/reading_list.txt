@@ -1,0 +1,5 @@
+1)  Week 1
+- Programming Many Core Chips
+-  What Every Programmer Should Know About Memory
+- An analysis of scalability in Linux
+-  Interconnections in Multi-Core Architectures: Understanding Mechanisms, Overheads and Scaling
