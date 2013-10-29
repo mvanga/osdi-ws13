@@ -2,12 +2,25 @@
 \label{sec:reading}
 
 \paragraph{Understanding the hardware.}
-Studying architecture of main manyu core processors
-(Cell, Tilera, ...) focusing on how it differents
-form uniprocessors and multicores
-Identifying the key bottlenecks (
-\paragraph{Prior work on OS/software abstractions.}
+We first intend to study the design decisions of various multi-/many-core
+architectures ~\cite{Re:12,KTJR:05,BRUL:05,Va:11}, focusing on the Cell Broadband Engine, and Tilera series
+processors, for massively parallel homogeneous and heterogeneous cores,
+contrasting it with architectural choices made in Sandy Bridge processors.
+This should help us better understand the core bottlenecks in multi-/many-
+core architectures.
 
-Changing abstractions in terms of OS Design:fOs, Corey, Barrelfish, Tesselation
-In terms of scheduling and resource management: scheduling domains, Tesselation, Holistic Approach to NUMA, 
-\paragraph{Identifying shortcomings of existing work.}
+\paragraph{Prior work on OS/software abstractions.}
+This contains two aspects: focusing on the overall OS design for multi-/many-core
+systems, and looking 
+at individual components, such as scheduling and memory management more
+specifically. In investigating the first category, we hope to
+base our initial research on the work on multikernels, fOS~\cite{WC:10}, Corey~\cite{BW08},
+ Barrelfish ~\cite{SPBRBHI:08,BBDHIPRSS:09},
+and on investigating alternative OS abstractions potentially better suited for many-core, 
+contrasting these with  what current OSes do today~\cite{BW:10}.
+  We more specifically hope to investigate
+the scheduling and resource management challenges associated with large, potentially heterogeneous cores.
+should scheduling be distributed? Should resources be statically partitioned? How should underlying interconnect mechanisms influence those decisions? 
+We are especially interested in researching further the space partitioning
+proposed by many, including Tessellation~\cite{LKBHAK:09}, as combined with aggressive thread-level speculation to leverange additional parallelism..
+
