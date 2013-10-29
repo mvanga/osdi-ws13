@@ -1,6 +1,6 @@
 \section{Multi/Many-Core Architectures}
 \label{sec:overview}
-In this abstract, we distinguish the notions of multi- and many-core
+We distinguish the notions of multi- and many-core
 architectures acording to the following definition~\cite{Re:12}:
 \emph{multi-core} systems can be thought of as the iterative squeezing of powerful
  single-core chips that
@@ -10,7 +10,7 @@ and add additional functionality needed for supporting multiple cores. This
 contrasts with \emph{many-core} architectures, which are built from the ground up 
 to support massive parallelism at the cost of slower processor speeds,
 with a large number of fairly simple cores.  Examples include
-the new Intel Xeon processors and the Tilera line of massively parallel proecssors.
+the new Intel Xeon processors and the Tilera~\cite{bell2008tile64} line of massively parallel proecssors.
 These represent a significant paradigm shift over previous designs.
 
 We highlight various architectural designs present in commercial off-the-shelf
@@ -24,8 +24,7 @@ whereas large number of simple cores are explicitly geared towards
 optimising thread-level and data-level parallelism.
 \item {\bf Heterogeineity} In seeking to strike a balance between parallel and
 serial performance, existing processor designs combine multiple CPU cores with
-different physical characteristics, optimised for different tasks. The many-core
-Cell BE thus combines 2 distict kinds of processors with different ISAs, by
+different physical characteristics, optimised for different tasks. The many-core Cell BE ~\cite{Cell} thus combines 2 distict kinds of processors with different ISAs, by
 contrast Tilera only considers identical cores.
 \item {\bf Interconnection Links} The large majority of uniprocessor systems
 used a ring-based interconnect. This is often no longer appropriate for
