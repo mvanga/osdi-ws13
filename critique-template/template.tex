@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{fullpage}
+\usepackage{titling}
+\usepackage{marginnote}
+\usepackage[top=2cm, bottom=1.3cm, outer=1cm, inner=1cm, heightrounded]{geometry}
+
+\begin{document}
+
+\titleformat{\section}{\normalfont\scshape}{\thesection}{1em}{}
+\titleformat{\subsection}{\small}{\thesubsection}{1em}{}
+\newcommand{\mynote}[1]{{
+	\begin{samepage}
+	\footnotesize{
+		\textbf{Notes}:~#1
+	}
+	\vspace*{5cm}
+	\end{samepage}
+}}
+\newcommand{\myquestion}[1]{{\subsection{#1}}\vspace*{1.2cm}}
+
+\setlength{\droptitle}{-5em}
+
+\title{Paper Notes: (Insert Title Here)\vspace{-2ex}}
+\author{}
+\date{}
+
+\maketitle
+\vspace{-6em}
+
+\section{Comprehension}
+\subsection{What is the research problem the paper attempts to address?}
+\mynote{What is the \emph{motivation} of the research work? Is there a \emph{crisis} in the research ﬁeld that the paper attempts to resolve? Is the research work attempting to \emph{overcome the weaknesses} of existing approaches? Is an existing \emph{research paradigm} challenged? In short, what is the \emph{niche} of the paper?}
+
+\subsection{What are the claimed contributions of the paper?}
+\mynote{What is \emph{new} in this paper?  A new \emph{question} is asked? A new \emph{understanding} of the research problem? A new \emph{methodology} for solving problems? A new \emph{algorithm}? A new breed of software \emph{tools or systems}? A new \emph{experimental method}? A new \emph{proof technique}? A new \emph{formalism or notation}? A new \emph{evidence} to substantiate or disprove a previously published claim?  A new \emph{research area}? In short, what is \emph{innovative} about this paper?} 
+
+\subsection{How do the authors substantiate their claims?}
+\mynote{What is the \emph{methodology} adopted to substantiate the claims? What is the \emph{argument} of the paper? What are the major \emph{theorems}? What emph{experiments} were conducted? \emph{Data analyses}? \emph{Simulations}? \emph{Benchmarks}? \emph{User studies}? \emph{Case studies}? \emph{Examples}? Basically, what makes the claims scientific (as opposed to mere opinions)?}
+
+\subsection{What are the conclusions?}
+\mynote{What have we \emph{learned} from the paper? Shall the \emph{standard practice} of the ﬁeld be changed as a result of the new ﬁndings? Is the result \emph{generalizable}? Can the result be applied to \emph{other areas} of the ﬁeld? What are the \emph{open problems}? In short, what are the \emph{lessons} one can learn from the paper?} 
+
+\vspace{2em}
+\section{Evaluation}
+\subsection{Is the research problem significant?}
+\mynote{Is the work scratching \emph{minor itches}? Are the authors solving \emph{artiﬁcial problems} (aka straw man)? Does the work enable \emph{practical applications}, \emph{deepen understanding}, or explore a \emph{new design space}?}
+
+\vspace{2em}
+\subsection{Are the contributions significant?}
+\mynote{Is the paper \emph{worth reading}? Are the authors simply \emph{repeating} the state of the art? Are there real \emph{surprises}? Are the authors aware of the relation of their work to \emph{existing literature}? Is the paper addressing a well-known \emph{open problem}?}
+
+\vspace{4em}
+\subsection{Are the claims valid?}
+\mynote{Have the authors been \emph{cutting corners} (intentionally or unintentionally)? Has the right theorem been proven? Errors in proofs? Problematic experimental setup? Confounding factors? Unrealistic, artificial benchmarks? Comparing apples and oranges? Methodological misunderstanding? Do the numbers add up? Are any generalizations valid? Are the claims modest enough? That is, is the scope clearly delimited?}
+
+
+\section{Synthesis}
+\myquestion{What is the crux of the research problem?}
+\myquestion{What are alternative approaches to address the same problem?}
+\myquestion{Is there an alternate way to substantiate the claims made?}
+\myquestion{What is a good argument against the case made in the paper?}
+\myquestion{Can the research results be strengthened?}
+\myquestion{Can the research be applied in a different context?}
+\myquestion{What are the open problems raised by this work?}
+\myquestion{If you were to do the same research, how would you do it?}
+
+\end{document}
