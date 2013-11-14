@@ -1,0 +1,62 @@
+\documentclass[10pt,twocolumn]{article}
+
+% Layout
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage[small]{titlesec}
+\usepackage[subfigure]{tocloft}
+
+% Citation style
+\usepackage[numbers,sort&compress]{natbib}
+
+% include citations inline
+\usepackage{bibentry}
+\nobibliography*
+
+% Figures
+\usepackage[tight]{subfigure}
+\usepackage{epsfig}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage[font=small,labelfont=bf]{caption}
+
+% Enumerations
+\usepackage{paralist}
+
+% Math
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Typography
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{textcomp}
+
+% Macro support
+\usepackage{xspace}
+
+% PDF links
+%\usepackage[hidelinks]{hyperref} % backref=page
+
+% Algorithms
+\usepackage{algorithm2e}
+\let\chapter\undefined
+
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\numberwithin{equation}{section}
+
+%\usepackage[pagewise]{lineno}
+
+\input{layout}
+\input{macros}
+
+
+\theoremstyle{definition}
+\newtheorem{mydef}{Definition}
+\newtheorem{property}{Property}
+\newtheorem{constraint}{Constraint}
+\newtheorem{invariant}{Invariant}
+\usepackage{paralist}
+
+\usepackage{enumitem}
