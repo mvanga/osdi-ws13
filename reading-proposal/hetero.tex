@@ -1,9 +1,12 @@
 \section{A Taxonomy of Heterogeneity}
 
-The following texts are overview papers/textbookss which
+The following texts are overview papers/textbooks which
 broadly describe the area, or motivate the transition
 to multicore
 \begin{itemize}
+\item \emph{Programming Many Core Chips} Textbook overview
+on multicore systems with heavy focus on heterogeneity
+
 \item \emph{Heterogeneous Chip Multiprocessors} General overview
 of the design space and motivation for moving to multiprocessors
 \item \emph{Amdahl's Law in the Multicore Era} Using Ahmdahl's law,
@@ -17,10 +20,30 @@ are future designs going to be?
 Identifies off chip memory bandwidth as the main challenge for future chip multi-
 processor designs. Link to heterogeneity is a little bit more tenuous, but
 provides useful insight on what future designs are likely to look like. 
+\item \emph{Rodinia: A Benchmark Suite for Heterogeneous Computing} Aims
+to be the SPEC benchmark equivalent targeted specifically towards heterogeneous
+computing (multiple CPUS, and GPUs). Provides indications of what the likely
+bottlenecks ins such machines are, or likely to be with regards to application
+characteristics
+\item \emph{Thousand Core Chipsâ€”A Technology Perspective} Describes the
+architectural challenges that arise in a 1000 core chips, focusing
+on memory bandwidth, power management and resilience 
 
 \end{itemize}
 
+This lists a few architectures which we believe we should study
+\begin{itemize}
+\item \emph{Larrabee: A Many-Core x86 Architecture for Visual Computing}
+\item \emph{The Cell Processor Architecture}
+\end{itemize}
+
 \subsection{Heterogeneity in Communication}
+
+\begin{itemize}
+\item \item \emph{Interconnections in MultiCore Architectures: understanding mechanisms,
+overheads and scaling} Note. Not specifically linked to latency, but 
+shows the dependencies on the interconnect to most of the rest of the system 
+\end{itemize}
 
 \subsubsection{Memory Access Latency}
 \begin{itemize}
@@ -30,13 +53,31 @@ placement. Focuses here specifically on true memory patterns exhibited in
 NUMA architectures
 \item \emph{Traffic Management: A Holistic Approach to Memory Placement on NUMA Systems}
 Makes the point that not sufficient to consider memory access latency only in scheduling
-but should also take into account memory bandwdith and interconnect bottlenecks
+but should also take into account memory bandwidth and interconnect bottlenecks
+\item \emph{Adaptive set pinning: managing shared caches in chip multiprocessors}
+Paper identifies third kind of cache misses ``intraprocessor misses'' and
+investigates the implications thereof. Uses a technique called
+set pinning to minimise those
+\item \emph{Everything you ever wanted to know about synchronisation but
+were afraid to ask} Quantifies the cost of off chip memory accesses.
+\item \emph{What Every Programmer Should Know About Memory} Textbook overview
+about memory in computers, with specific chapters on non uniform memory
 \end{itemize}
 \subsubsection{Peripheral Access Latency}
+
 \subsubsection{Inter-processor Communication Latency}
+\begin{itemize}
+\item \emph{Resource Management in a Multicore Operating System} PhD dissertation
+on Barrelfish. Specifically interested in the IPC procedure for this section
 
+\end{itemize}
 \subsection{Heterogeneity in Individual Processors}
-
+\begin{itemize}
+\item \emph{Understanding Diversity int he Barrelfish manycore operating system}
+Identify three distinct types of diversity: non uniformity, core diversity and 
+system diversity. Develop a knowledge base to allow people to exploit
+diversity
+\end{itemize}
 \subsection{Instruction Set Architecture}
 \subsection{Power Consumption}
 \begin{itemize}
@@ -61,10 +102,21 @@ can generate better performance on some workloads
 \subsection{Capabilities}
 \subsection{Reliability and Failure Rate}
 \begin{itemize}
-\item \emph{It¡¯s Time for New Programming Models for Unreliable Hardware }
+\item \emph{ItÂ¡Â¯s Time for New Programming Models for Unreliable Hardware }
 Not specifically linked to heterogeneity but makes the point that, due
 to smaller transistors, reliability is going to become an issue. Suggests
-research directions on how to handle it. 
+research directions on how to handle it.
+\item \emph{Mixed-Mode Multicore Reliability} Identifies two classes
+of applications: those that need to run on reliable hardware, and those
+ that don't. Design new paradigm: Mixed Mode Multicore, which can
+run normal applications without the throughput overhead of reliability
+and those that requier dual modular redundancy. Presents mechanisms
+for switching between the two. Note - this is not quite
+reliability between processors, but rather exploiting multicore
+to achieve different reliability rates.
+\item \emph{Adapting to intermittent faults in multicore systems}
+Focuses on how can systems adapt to varying availability of resources
+caused by intermittent faults.
 \end{itemize}
 
 \section{Software}
@@ -79,7 +131,7 @@ core data structures to optimise MapReduce for multicores. Focuses on homogeneou
 architectures. Objective would be to compare/contrast design decisions with
 above paper when can assume homogeneity.
 \item \emph{The impact of performance asymmetry in emerging multicore architectures}
-Paper measures impact of performance stability on certain class of applciations.
+Paper measures impact of performance stability on certain class of applications.
 Demonstrates that not sufficient for OS scheduler to be heterogeneity aware,
 applications also need to be. 
 \item \emph{Hera-JVM: a runtime system for heterogeneous multi-core 
@@ -89,25 +141,40 @@ of parts of the code to run on the special purpose processors
 operating system. Claims benefits of having a single image and homogeneous view. 
 Presents challenges on building this on top of non cache coherent architectures.
 Focuses on message passing vs shared memory. 
+\item \emph{Understanding Diversity int he Barrelfish manycore operating system}
+Identify three distinct types of diversity: non uniformity, core diversity and 
+system diversity. Develop a knowledge base to allow people to exploit
+diversity
 \end{itemize}
 
 \subsection{OS}
 \begin{itemize}
 \item \emph{Your computer is already a distributed system. Why isn't your OS?}
+\item \emph{Resource Management in the Tessellation Manycore OS}
+\item \emph{The Multikernel: A new OS architecture for scalable multicore systems}
+\item \emph{An Operating System for Multicore and Clouds: Mechanisms and Implementation}
+\item \emph{Corey: An Operating System for Many Cores}
+\item \emph{Helios: Heterogeneous Multiprocessing with Satellite Kernels}
+\item \emph{Tornado: Maximizing Locality and Concurrency in a Shared
+Memory Multiprocessor Operating System}
+
 
 \item \emph{ HASS: a scheduler for heterogeneous multicore systems} Uses
 core data collected offline and thread characteristics collected at runtime to 
 generate near optimal per thread to core mapping
+\item \emph{Accelerating Critical Section Execution with Asymmetric Multi-Core Architectures}
+Critical sections are serialization points. Transfer thread to high performance 
+core during those.
+
 \item \emph{StarPU: a unified platform for task scheduling on heterogeneous
 multicore architectures} Provides a unified runtime environment, but with the
-ability for programmers to tune design decisions to exploit heterogeneinty. Demonstrates
-that if tuned wel, can actually achieve superlinear performance when exploiting heterogeneity
+ability for programmers to tune design decisions to exploit heterogeneity. Demonstrates
+that if tuned well, can actually achieve superlinear performance when exploiting heterogeneity
 (though is specific to HPC)
 \item \emph{Asymmetry-Aware Execution Placement on Manycore Chips} Focuses
 specifically here on using past physical memory usage to generate better thread
 placement. Focuses here specifically on true memory patterns exhibited in 
 NUMA architectures
-\item \emph{Helios}
 \item \emph{Single-ISA Heterogeneous Multi-Core Architectures for Multithreaded Workload Performance}
 Demonstrates that through proper assignments of threads to core, heterogeneity
 can actually significantly improve performance (not just power). This is not
@@ -116,7 +183,11 @@ level parallelism (can therefore exploit more TLP for the same die area), 2)
 better adaptation to application diversity (different applications or parts
 of applications place
 different requirements on cores, heterogeneous architectures can better
-taylor those requirements
+tailor those requirements
+\item \emph{Challenges and Opportunities
+in Many-Core Computing} As long as provide the required abstractions for applications, 
+many core computing and heterogeneity provides significant opportunities for application
+speedups and better tailoring of what the applications want and what the OS can provide
 \item \emph{Core fusion: accommodating software diversity in chip multiprocessors}
 Groups of processors can morph/fuse into one based on application requirements. 
 TODO: more detailed description. 
@@ -125,4 +196,16 @@ Adds support to Linux to efficiently take into account dynamic processors (proce
 which can reconfigure their characteristics at runtime, like Core Fusion).
 Bridges gap between OS view of the world and hardware capabilities for dyn.
 processors
+\item \emph{Using OS Observations to improve performance in multicore systems}
+Claim that necessary for OS to leverage past information of thread performance
+to adapt future policies. Identify main problems to be cache interference in the LLC,
+lack of intelligent thread migration, and lack of adaption to different
+core characteristics. 
+\item \emph{An Asymmetric Distributed Shared Memory Model for Heterogeneous Parallel Systems}
+Seems specifically targeted towards CPU vs GPUS. But makes the claim for an asymmetric
+memory space, where certain devices can access memory objects within he same address space,
+but not others. 
+\item \emph{An Analysis of Linux Scalability to Many Cores} Most scalability bottlenecks
+occur because of how applications are designed, or how they use kernel datastructures.
+Can achieve very good scalability if modify the kernel only slightly 
 \end{itemize}
