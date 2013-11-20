@@ -90,27 +90,27 @@ diversity \cite{Schuepbach08embracingdiversity}.
 \item \emph{Single-ISA heterogeneous multi-core architectures: the potential 
 for processor power reduction}  Multiple cores on a chip with different power
 footprints. Dynamically switches between all of them to match specific target.
-Makes tradeoff between power and performance explicit
+Makes tradeoff between power and performance explicit \cite{KFJRT:03}
 \item \emph {Maximizing Power Efficiency with Asymmetric Multicore Systems
 } Focuses on the challenges of specialisation in asymmetric multicore systems,
 more specificlaly on how to cater to thread level parallelism and instruction level
 parallelism (ex: not all programs, parts of programs will exhibit the same
 amount of ILP and thus benefit more or less from running on a more complex
-processor)
+processor) \cite{FSSP:09}
 \end{itemize}
 \subsection{Processor Speed}
 \begin{itemize}
 \item \emph{Heterogeneous Multicores: When Slower is Faster}
 Presents new operating system which can dynamically tune core
 frequency, and actually show that tuning frequency down
-can generate better performance on some workloads 
+can generate better performance on some workloads \cite{HBT}
 \end{itemize}
 \subsection{Reliability and Failure Rate}
 \begin{itemize}
-\item \emph{It¡¯s Time for New Programming Models for Unreliable Hardware }
+\item \emph{It's Time for New Programming Models for Unreliable Hardware }
 Not specifically linked to heterogeneity but makes the point that, due
 to smaller transistors, reliability is going to become an issue. Suggests
-research directions on how to handle it.
+research directions on how to handle it. \cite{FSC}
 \item \emph{Mixed-Mode Multicore Reliability} Identifies two classes
 of applications: those that need to run on reliable hardware, and those
  that don't. Design new paradigm: Mixed Mode Multicore, which can
@@ -118,7 +118,7 @@ run normal applications without the throughput overhead of reliability
 and those that requier dual modular redundancy. Presents mechanisms
 for switching between the two. Note - this is not quite
 reliability between processors, but rather exploiting multicore
-to achieve different reliability rates.
+to achieve different reliability rates. \cite{WCS:09}
 \item \emph{Adapting to intermittent faults in multicore systems}
 Focuses on how can systems adapt to varying availability of resources
 caused by intermittent faults.
