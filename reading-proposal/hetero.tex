@@ -4,37 +4,37 @@ The following texts are overview papers/textbooks which
 broadly describe the area, or motivate the transition
 to multicore
 \begin{itemize}
-\item \emph{Programming Many Core Chips} Textbook overview
-on multicore systems with heavy focus on heterogeneity
+\item \emph{Programming Many Core Chips}: Textbook overview
+on multicore systems with heavy focus on heterogeneity \cite{Vajda:141419}.
 
 \item \emph{Heterogeneous Chip Multiprocessors} General overview
-of the design space and motivation for moving to multiprocessors
+of the design space and motivation for moving to multiprocessors \cite{Kumar:2005:HCM:1100859.1100890}.
 \item \emph{Amdahl's Law in the Multicore Era} Using Ahmdahl's law,
 calculates potential speedup with regards to number of cores
-in symmetric, asymmetric, and dynamic chips
+in symmetric, asymmetric, and dynamic chips \cite{4563876}.
 \item \emph{Single-Chip Heterogeneous Computing: Does the Future Include Custom 
 Logic, FPGAs, and GPGPUs?} Debates on the future 
 of heterogeneous chips, specifically, just quite how diverse
-are future designs going to be?
+are future designs going to be? \cite{5695539}
 \item \emph{Scaling the bandwidth wall: challenges in and avenues for CMP scaling}
 Identifies off chip memory bandwidth as the main challenge for future chip multi-
 processor designs. Link to heterogeneity is a little bit more tenuous, but
-provides useful insight on what future designs are likely to look like. 
+provides useful insight on what future designs are likely to look like \cite{Rogers_scalingthe}.
 \item \emph{Rodinia: A Benchmark Suite for Heterogeneous Computing} Aims
 to be the SPEC benchmark equivalent targeted specifically towards heterogeneous
 computing (multiple CPUS, and GPUs). Provides indications of what the likely
 bottlenecks ins such machines are, or likely to be with regards to application
-characteristics
+characteristics \cite{5306797}.
 \item \emph{Thousand Core Chips—A Technology Perspective} Describes the
 architectural challenges that arise in a 1000 core chips, focusing
-on memory bandwidth, power management and resilience 
+on memory bandwidth, power management and resilience \cite{Borkar:2007:TCC:1278480.1278667}.
 
 \end{itemize}
 
 This lists a few architectures which we believe we should study
 \begin{itemize}
-\item \emph{Larrabee: A Many-Core x86 Architecture for Visual Computing}
-\item \emph{The Cell Processor Architecture}
+\item \emph{Larrabee: A Many-Core x86 Architecture for Visual Computing} \cite{4796165}
+\item \emph{The Cell Processor Architecture} \cite{1540943}
 \end{itemize}
 
 \subsection{Heterogeneity in Communication}
@@ -42,7 +42,7 @@ This lists a few architectures which we believe we should study
 \begin{itemize}
 \item \item \emph{Interconnections in MultiCore Architectures: understanding mechanisms,
 overheads and scaling} Note. Not specifically linked to latency, but 
-shows the dependencies on the interconnect to most of the rest of the system 
+shows the dependencies on the interconnect to most of the rest of the system \cite{1431574}.
 \end{itemize}
 
 \subsubsection{Memory Access Latency}
@@ -50,33 +50,33 @@ shows the dependencies on the interconnect to most of the rest of the system
 \item \emph{Asymmetry-Aware Execution Placement on Manycore Chips} Focuses
 specifically here on using past physical memory usage to generate better thread
 placement. Focuses here specifically on true memory patterns exhibited in 
-NUMA architectures
+NUMA architectures \cite{atumanov-sfma13}.
 \item \emph{Traffic Management: A Holistic Approach to Memory Placement on NUMA Systems}
 Makes the point that not sufficient to consider memory access latency only in scheduling
-but should also take into account memory bandwidth and interconnect bottlenecks
+but should also take into account memory bandwidth and interconnect bottlenecks \cite{Dashti:2013:TMH:2451116.2451157}.
 \item \emph{Adaptive set pinning: managing shared caches in chip multiprocessors}
 Paper identifies third kind of cache misses ``intraprocessor misses'' and
 investigates the implications thereof. Uses a technique called
-set pinning to minimise those
+set pinning to minimise those \cite{Srikantaiah08adaptiveset}.
 \item \emph{Everything you ever wanted to know about synchronisation but
-were afraid to ask} Quantifies the cost of off chip memory accesses.
+were afraid to ask} Quantifies the cost of off chip memory accesses \cite{David:2013:EYA:2517349.2522714}.
 \item \emph{What Every Programmer Should Know About Memory} Textbook overview
-about memory in computers, with specific chapters on non uniform memory
+about memory in computers, with specific chapters on non uniform memory \cite{Drepper07whatevery}.
 \end{itemize}
 \subsubsection{Peripheral Access Latency}
 
 \subsubsection{Inter-processor Communication Latency}
 \begin{itemize}
 \item \emph{Resource Management in a Multicore Operating System} PhD dissertation
-on Barrelfish. Specifically interested in the IPC procedure for this section
+on Barrelfish. Specifically interested in the IPC procedure for this section \cite{10.1109/MM.2011.1}.
 
 \end{itemize}
 \subsection{Heterogeneity in Individual Processors}
 \begin{itemize}
-\item \emph{Understanding Diversity int he Barrelfish manycore operating system}
+\item \emph{Embracing Diversity int he Barrelfish manycore operating system}
 Identify three distinct types of diversity: non uniformity, core diversity and 
 system diversity. Develop a knowledge base to allow people to exploit
-diversity
+diversity \cite{Schüpbach08embracingdiversity}.
 \end{itemize}
 \subsection{Instruction Set Architecture}
 \subsection{Power Consumption}
