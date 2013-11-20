@@ -156,30 +156,30 @@ diversity
 \begin{itemize}
 \item \emph{Your computer is already a distributed system. Why isn't your OS?} \cite{baumann2009your}
 \item \emph{Resource Management in the Tessellation Manycore OS} \cite{colmenares2010resource}
-\item \emph{The Multikernel: A new OS architecture for scalable multicore systems}
-\item \emph{An Operating System for Multicore and Clouds: Mechanisms and Implementation}
-\item \emph{Corey: An Operating System for Many Cores}
-\item \emph{Helios: Heterogeneous Multiprocessing with Satellite Kernels}
+\item \emph{The Multikernel: A new OS architecture for scalable multicore systems} \cite{Baumann:2009:MNO:1629575.1629579}
+\item \emph{An Operating System for Multicore and Clouds: Mechanisms and Implementation} \cite{Wentzlaff:2010:OSM:1807128.1807132}
+\item \emph{Corey: An Operating System for Many Cores} \cite{boyd2008corey}
+\item \emph{Helios: Heterogeneous Multiprocessing with Satellite Kernels} \cite{Nightingale:2009:HHM:1629575.1629597}
 \item \emph{Tornado: Maximizing Locality and Concurrency in a Shared
-Memory Multiprocessor Operating System}
+Memory Multiprocessor Operating System} \cite{gamsa1999tornado}
 
 
 \item \emph{ HASS: a scheduler for heterogeneous multicore systems} Uses
 core data collected offline and thread characteristics collected at runtime to 
-generate near optimal per thread to core mapping
+generate near optimal per thread to core mapping \cite{Shelepov:2009:HSH:1531793.1531804}
 \item \emph{Accelerating Critical Section Execution with Asymmetric Multi-Core Architectures}
 Critical sections are serialization points. Transfer thread to high performance 
-core during those.
+core during those. \cite{Suleman:2009:ACS:1508244.1508274}
 
 \item \emph{StarPU: a unified platform for task scheduling on heterogeneous
 multicore architectures} Provides a unified runtime environment, but with the
 ability for programmers to tune design decisions to exploit heterogeneity. Demonstrates
 that if tuned well, can actually achieve superlinear performance when exploiting heterogeneity
-(though is specific to HPC)
+(though is specific to HPC) \cite{CPE:CPE1631}
 \item \emph{Asymmetry-Aware Execution Placement on Manycore Chips} Focuses
 specifically here on using past physical memory usage to generate better thread
 placement. Focuses here specifically on true memory patterns exhibited in 
-NUMA architectures
+NUMA architectures \cite{tumanovasymmetry}
 \item \emph{Single-ISA Heterogeneous Multi-Core Architectures for Multithreaded Workload Performance}
 Demonstrates that through proper assignments of threads to core, heterogeneity
 can actually significantly improve performance (not just power). This is not
@@ -188,29 +188,29 @@ level parallelism (can therefore exploit more TLP for the same die area), 2)
 better adaptation to application diversity (different applications or parts
 of applications place
 different requirements on cores, heterogeneous architectures can better
-tailor those requirements
+tailor those requirements \cite{Kumar:2004:SHM:998680.1006707}
 \item \emph{Challenges and Opportunities
 in Many-Core Computing} As long as provide the required abstractions for applications, 
 many core computing and heterogeneity provides significant opportunities for application
-speedups and better tailoring of what the applications want and what the OS can provide
+speedups and better tailoring of what the applications want and what the OS can provide \cite{manferdelli2008challenges}
 \item \emph{Core fusion: accommodating software diversity in chip multiprocessors}
 Groups of processors can morph/fuse into one based on application requirements. 
-TODO: more detailed description. 
+TODO: more detailed description. \cite{Ipek:2007:CFA:1250662.1250686}
 \item \emph{Chameleon: Operating System Support for Dynamic Processors}
 Adds support to Linux to efficiently take into account dynamic processors (processors
 which can reconfigure their characteristics at runtime, like Core Fusion).
 Bridges gap between OS view of the world and hardware capabilities for dyn.
-processors
+processors 
 \item \emph{Using OS Observations to improve performance in multicore systems}
 Claim that necessary for OS to leverage past information of thread performance
 to adapt future policies. Identify main problems to be cache interference in the LLC,
 lack of intelligent thread migration, and lack of adaption to different
-core characteristics. 
+core characteristics. \cite{knauerhase2008using}
 \item \emph{An Asymmetric Distributed Shared Memory Model for Heterogeneous Parallel Systems}
 Seems specifically targeted towards CPU vs GPUS. But makes the claim for an asymmetric
 memory space, where certain devices can access memory objects within he same address space,
-but not others. 
+but not others. \cite{Gelado:2010:ADS:1736020.1736059}
 \item \emph{An Analysis of Linux Scalability to Many Cores} Most scalability bottlenecks
 occur because of how applications are designed, or how they use kernel datastructures.
-Can achieve very good scalability if modify the kernel only slightly 
-\end{itemize}
+Can achieve very good scalability if modify the kernel only slightly \cite{boyd2010analysis} 
+\end{itemize} 
