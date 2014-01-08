@@ -1,0 +1,247 @@
+ \section{A Taxonomy of Heterogeneity}
+
+The following texts are overview papers/textbooks which
+broadly describe the area, or motivate the transition
+to multicore
+\begin{itemize}
+\item \emph{Programming Many Core Chips}: Textbook overview
+on multicore systems with heavy focus on heterogeneity \cite{Vajda:1414193}.
+
+\item \emph{Heterogeneous Chip Multiprocessors} General overview
+of the design space and motivation for moving to multiprocessors \cite{Kumar:2005:HCM:1100859.1100890}.
+\item \emph{Amdahl's Law in the Multicore Era} Using Ahmdahl's law,
+calculates potential speedup with regards to number of cores
+in symmetric, asymmetric, and dynamic chips \cite{4563876}.
+\item \emph{Single-Chip Heterogeneous Computing: Does the Future Include Custom 
+Logic, FPGAs, and GPGPUs?} Debates on the future 
+of heterogeneous chips, specifically, just quite how diverse
+are future designs going to be? \cite{5695539}
+\item \emph{Scaling the bandwidth wall: challenges in and avenues for CMP scaling}
+Identifies off chip memory bandwidth as the main challenge for future chip multi-
+processor designs. Link to heterogeneity is a little bit more tenuous, but
+provides useful insight on what future designs are likely to look like \cite{Rogers_scalingthe}.
+\item \emph{Rodinia: A Benchmark Suite for Heterogeneous Computing} Aims
+to be the SPEC benchmark equivalent targeted specifically towards heterogeneous
+computing (multiple CPUS, and GPUs). Provides indications of what the likely
+bottlenecks ins such machines are, or likely to be with regards to application
+characteristics \cite{5306797}.
+\item \emph{Thousand Core Chips—A Technology Perspective} Describes the
+architectural challenges that arise in a 1000 core chips, focusing
+on memory bandwidth, power management and resilience \cite{Borkar:2007:TCC:1278480.1278667}.
+
+\end{itemize}
+
+This lists a few architectures which we believe we should study. They
+strike different points in the design space with regards to heterogeneous/homogeneous
+core capabilities, single/multiple ISAs, and interconnect designs. 
+\begin{itemize}
+\item \emph{Larrabee: A Many-Core x86 Architecture for Visual Computing} \cite{4796165}
+\item \emph{The Cell Processor Architecture} \cite{1540943}
+\item \emph{ARM Big.LITTLE Processor Architecture} \cite{ABL}
+\item \emph{Tilera} \cite{Wentzlaff:2007:OIA:1320302.1320834}
+\end{itemize}
+
+\subsection{Heterogeneity in Communication}
+
+\begin{itemize}
+\item \emph{Interconnections in MultiCore Architectures: understanding mechanisms,
+overheads and scaling} Note. Not specifically linked to latency, but 
+shows the dependencies on the interconnect to most of the rest of the system \cite{1431574}.
+\end{itemize}
+
+\subsubsection{Memory Access Latency}
+\begin{itemize}
+\item \emph{Asymmetry-Aware Execution Placement on Manycore Chips} Focuses
+specifically here on using past physical memory usage to generate better thread
+placement. Focuses here specifically on true memory patterns exhibited in 
+NUMA architectures \cite{atumanov-sfma13}.
+\item \emph{Traffic Management: A Holistic Approach to Memory Placement on NUMA Systems}
+Makes the point that not sufficient to consider memory access latency only in scheduling
+but should also take into account memory bandwidth and interconnect bottlenecks \cite{Dashti:2013:TMH:2451116.2451157}.
+\item \emph{Adaptive set pinning: managing shared caches in chip multiprocessors}
+Paper identifies third kind of cache misses ``intraprocessor misses'' and
+investigates the implications thereof. Uses a technique called
+set pinning to minimise those \cite{Srikantaiah08adaptiveset}.
+\item \emph{Everything you ever wanted to know about synchronisation but
+were afraid to ask} Quantifies the cost of off chip memory accesses \cite{David:2013:EYA:2517349.2522714}.
+\item \emph{What Every Programmer Should Know About Memory} Textbook overview
+about memory in computers, with specific chapters on non uniform memory \cite{Drepper07whatevery}.
+\end{itemize}
+\subsubsection{Peripheral Access Latency}
+\begin{itemize}
+\item \emph{Helios: Heterogeneous Multiprocessing with Satellite Kernels} 
+Processes can specify affinities to be located closer or further away 
+from certain devices/other processes
+\cite{Nightingale:2009:HHM:1629575.1629597}
+\item \emph{Programming Many Core Chips}: Textbook overview
+on multicore systems with heavy focus on heterogeneity \cite{Vajda:1414193}.
+\end{itemize}
+ \subsubsection{Inter-processor Communication Latency}
+\begin{itemize}
+\item \emph{Resource Management in a Multicore Operating System} PhD dissertation
+on Barrelfish. Specifically interested in the IPC procedure for this section \cite{10.1109/MM.2011.1}.
+\item \emph{Programming Many Core Chips}: Textbook overview
+on multicore systems with heavy focus on heterogeneity \cite{Vajda:1414193}.
+\end{itemize}
+\subsection{Heterogeneity in Individual Processors}
+\begin{itemize}
+\item \emph{Embracing Diversity in the Barrelfish manycore operating system}
+Identify three distinct types of diversity: non uniformity, core diversity and 
+system diversity. Develop a knowledge base to allow people to exploit
+diversity \cite{Schupbach08embracingdiversity}
+\end{itemize}
+\subsection{Instruction Set Architecture and Capabilities}
+\begin{itemize}
+\item \emph{ARM Big.LITTLE Processor Architecture} \cite{ABL}
+\item \emph{Programming Many Core Chips}: Textbook overview
+on multicore systems with heavy focus on heterogeneity \cite{Vajda:1414193}.
+\item \emph{Heterogeneous Chip Multiprocessors} General overview
+of the design space and motivation for moving to multiprocessors \cite{Kumar:2005:HCM:1100859.1100890}.
+\item \emph{Hera-JVM: a runtime system for heterogeneous multi-core 
+architectures} JVM implementation for the Cell processor. Requires annotation
+of parts of the code to run on the special purpose processors \cite{McIlroy:2010:HRS:1869459.1869478}
+\item \emph{Dandelion: A compiler and Runtime For Heterogeneous Systems} \cite{Rossbach:2013:DCR:2517349.2522715}
+Enable normal data-processing code to leverage heterogeneity of underlying
+machine with as little effort from the programmer required.
+\item \emph{The impact of performance asymmetry in emerging multicore architectures}
+Paper measures impact of performance stability on certain class of applications.
+Demonstrates that not sufficient for OS scheduler to be heterogeneity aware,
+applications also need to be. \cite{Balakrishnan:2005:IPA:1069807.1070012} 
+\end{itemize}
+
+\subsection{Power Consumption}
+\begin{itemize}
+\item \emph{Single-ISA heterogeneous multi-core architectures: the potential 
+for processor power reduction}  Multiple cores on a chip with different power
+footprints. Dynamically switches between all of them to match specific target.
+Makes tradeoff between power and performance explicit \cite{KFJRT:03}
+\item \emph {Maximizing Power Efficiency with Asymmetric Multicore Systems
+} Focuses on the challenges of specialisation in asymmetric multicore systems,
+more specificlaly on how to cater to thread level parallelism and instruction level
+parallelism (ex: not all programs, parts of programs will exhibit the same
+amount of ILP and thus benefit more or less from running on a more complex
+processor) \cite{FSSP:09}
+\end{itemize}
+\subsection{Processor Speed}
+\begin{itemize}
+\item \emph{Heterogeneous Multicores: When Slower is Faster}
+Presents new operating system which can dynamically tune core
+frequency, and actually show that tuning frequency down
+can generate better performance on some workloads \cite{HBT}
+\end{itemize}
+\subsection{Reliability and Failure Rate}
+\begin{itemize}
+\item \emph{It's Time for New Programming Models for Unreliable Hardware }
+Not specifically linked to heterogeneity but makes the point that, due
+to smaller transistors, reliability is going to become an issue. Suggests
+research directions on how to handle it. \cite{FSC}
+\item \emph{Mixed-Mode Multicore Reliability} Identifies two classes
+of applications: those that need to run on reliable hardware, and those
+ that don't. Design new paradigm: Mixed Mode Multicore, which can
+run normal applications without the throughput overhead of reliability
+and those that requier dual modular redundancy. Presents mechanisms
+for switching between the two. Note - this is not quite
+reliability between processors, but rather exploiting multicore
+to achieve different reliability rates. \cite{WCS:09}
+\item \emph{Adapting to intermittent faults in multicore systems}
+Focuses on how can systems adapt to varying availability of resources
+caused by intermittent faults. \cite{WCS:08}
+\item \emph{Your computer is already a distributed system. Why isn't your OS?} \cite{baumann2009your}
+Makes the point that similarities between multicores and distributed systems are 
+rising, with increasing hereterogeneity, and increasing unreliability of components.
+\end{itemize}
+
+\section{Software}
+
+\subsection{Applications}
+\begin{itemize}
+\item \emph{Merge: a programming model for heterogeneous multi-core systems}
+Map-Reduce paradigm specifically geared towards heterogeneous multicore systems,
+includes multiple versions of functions which are optimised for different architectures \cite{LCWM:08}
+\item \emph{Optimizing MapReduce for Multicore Architectures} Focuses on redesigning
+core data structures to optimise MapReduce for multicores. Focuses on homogeneous
+architectures. Objective would be to compare/contrast design decisions with
+above paper when can assume homogeneity. \cite{Mao10optimizingmapreduce}
+\item \emph{The impact of performance asymmetry in emerging multicore architectures}
+Paper measures impact of performance stability on certain class of applications.
+Demonstrates that not sufficient for OS scheduler to be heterogeneity aware,
+applications also need to be. \cite{Balakrishnan:2005:IPA:1069807.1070012} 
+\item \emph{Hera-JVM: a runtime system for heterogeneous multi-core 
+architectures} JVM implementation for the Cell processor. Requires annotation
+of parts of the code to run on the special purpose processors \cite{McIlroy:2010:HRS:1869459.1869478}
+\item \emph{A JVM for the Barrelfish Operating System} JVM for the Barrelfish
+operating system. Claims benefits of having a single image and homogeneous view. 
+Presents challenges on building this on top of non cache coherent architectures.
+Focuses on message passing vs shared memory. \cite{maasjvm} 
+\item \emph{Understanding Diversity in the Barrelfish manycore operating system}
+Identify three distinct types of diversity: non uniformity, core diversity and 
+system diversity. Develop a knowledge base to allow people to exploit
+diversity \cite{Schupbach08embracingdiversity}
+\item \emph{Dandelion: A compiler and Runtime For Heterogeneous Systems} 
+Enable normal data-processing code to leverage heterogeneity of underlying
+machine with as little effort from the programmer required. \cite{Rossbach:2013:DCR:2517349.2522715}
+\end{itemize}
+
+\subsection{OS}
+\begin{itemize}
+\item \emph{Your computer is already a distributed system. Why isn't your OS?} \cite{baumann2009your}
+Makes the point that similarities between multicores and distributed systems are 
+rising, with increasing hereterogeneity, and increasing unreliability of components.
+\item The following 5 citations are operating systems for multicore/many core which make slightly different design decisions. Our objective is to understand what are the assumptions that they each make with regards to the kind of multicore architecture they are assuming, and how these assumptions affect their design decision
+\item \emph{Resource Management in the Tessellation Manycore OS} \cite{colmenares2010resource}
+\item \emph{The Multikernel: A new OS architecture for scalable multicore systems} \cite{Baumann:2009:MNO:1629575.1629579}
+\item \emph{An Operating System for Multicore and Clouds: Mechanisms and Implementation} \cite{Wentzlaff:2010:OSM:1807128.1807132}
+\item \emph{Corey: An Operating System for Many Cores} \cite{boyd2008corey}
+\item \emph{Helios: Heterogeneous Multiprocessing with Satellite Kernels} \cite{Nightingale:2009:HHM:1629575.1629597}
+\item \emph{Tornado: Maximizing Locality and Concurrency in a Shared
+Memory Multiprocessor Operating System} \cite{gamsa1999tornado}
+
+\item \emph{ HASS: a scheduler for heterogeneous multicore systems} Uses
+core data collected offline and thread characteristics collected at runtime to 
+generate near optimal per thread to core mapping \cite{Shelepov:2009:HSH:1531793.1531804}
+\item \emph{Accelerating Critical Section Execution with Asymmetric Multi-Core Architectures}
+Critical sections are serialisation points. Transfer thread to high performance 
+core during those. \cite{Suleman:2009:ACS:1508244.1508274}
+\item \emph{StarPU: a unified platform for task scheduling on heterogeneous
+multicore architectures} Provides a unified runtime environment, but with the
+ability for programmers to tune design decisions to exploit heterogeneity. Demonstrates
+that if tuned well, can actually achieve superlinear performance when exploiting heterogeneity
+(though is specific to HPC) \cite{CPE:CPE1631}
+\item \emph{Asymmetry-Aware Execution Placement on Manycore Chips} Focuses
+specifically here on using past physical memory usage to generate better thread
+placement. Focuses here specifically on true memory patterns exhibited in 
+NUMA architectures \cite{tumanovasymmetry}
+\item \emph{Single-ISA Heterogeneous Multi-Core Architectures for Multithreaded Workload Performance}
+Demonstrates that through proper assignments of threads to core, heterogeneity
+can actually significantly improve performance (not just power). This is not
+limited to HPC. Two main reasons they highlight: more efficient die use for thread
+level parallelism (can therefore exploit more TLP for the same die area), 2)
+better adaptation to application diversity (different applications or parts
+of applications place
+different requirements on cores, heterogeneous architectures can better
+tailor those requirements \cite{Kumar:2004:SHM:998680.1006707}
+\item \emph{Challenges and Opportunities
+in Many-Core Computing} As long as provide the required abstractions for applications, 
+many core computing and heterogeneity provides significant opportunities for application
+speedups and better tailoring of what the applications want and what the OS can provide \cite{manferdelli2008challenges}
+\item \emph{Core fusion: accommodating software diversity in chip multiprocessors}
+Groups of processors can morph/fuse into one based on application requirements. 
+TODO: more detailed description. \cite{Ipek:2007:CFA:1250662.1250686}
+\item \emph{Chameleon: Operating System Support for Dynamic Processors}
+Adds support to Linux to efficiently take into account dynamic processors (processors
+which can reconfigure their characteristics at runtime, like Core Fusion).
+Bridges gap between OS view of the world and hardware capabilities for dyn.
+processors \cite{Panneerselvam:2012:COS:2189750.2150988}
+\item \emph{Using OS Observations to improve performance in multicore systems}
+Claim that necessary for OS to leverage past information of thread performance
+to adapt future policies. Identify main problems to be cache interference in the LLC,
+lack of intelligent thread migration, and lack of adaption to different
+core characteristics. \cite{knauerhase2008using}
+\item \emph{An Asymmetric Distributed Shared Memory Model for Heterogeneous Parallel Systems}
+Seems specifically targeted towards CPU vs GPUS. But makes the claim for an asymmetric
+memory space, where certain devices can access memory objects within he same address space,
+but not others. \cite{Gelado:2010:ADS:1736020.1736059}
+\item \emph{An Analysis of Linux Scalability to Many Cores} Most scalability bottlenecks
+occur because of how applications are designed, or how they use kernel datastructures.
+Can achieve very good scalability if modify the kernel only slightly \cite{boyd2010analysis} 
+\end{itemize} 
