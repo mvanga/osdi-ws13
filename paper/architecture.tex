@@ -1,0 +1,112 @@
+\section{Multicore Architectures}
+\begin{itemize}
+\item This section describes the three broad trends exhbited in designing
+multicore systems. We compare and contrast the motivation
+behind these design decisions and their impact in terms of performance/
+programmability  
+\begin{itemize}
+\item Fewer, but more complex high performance cores with large,
+shared on chip caches and cache coherence mechanisms
+\item large number of simple, low frequency cores with distributed on chip
+memories and scalable interconnects.
+\item Integration of multiple cores of different capabilities and 
+potentially supporting different instruction set architectures. 
+\end{itemize}
+\item For the first one, describe the Sandby Bridge Processor
+\item Here the objective is to maximise performance for mostly sequential application
+whilst exploiting a little bit of TLP when possible. 
+\item For the second, describe Tilera architecture. Here, everything is about
+low power cores, so power efficiency, but at the same time, they rely on 
+homogeneous cores for programmbility. Optimised for highly parallel
+applications, like DC. 
+\begin{itemize}
+\item Integrates large numbers of pwoer efficient processors interconencted by a scalable 
+point ot point mesh network and minimise bot power and wire  delay issues
+\item Dynamic Distributed Cache. Fully coherent. 
+\item Group things by tile. Each tile is a powerful, full featured computing systme 
+that can independently run an os such as linux. 
+An individaul tile is cpaable of executing upt o three ops per cycle. 
+\item Processors use three way VLIW processor. Compile time scheduling of VLIW operations results in 
+ower power consumption than dynamically scheduler superscalar processors. 
+\item Mesh networks offier significantly lower latency and lower power than bus
+or ring architectures, and because the bandwdith of mesh networks
+scales as more tiles are added, can scale to thousands of tiles without 
+becoming a bottleneck.
+
+\end{itemize}
+\item For the third, describe the BigLittle and the Cell processor. 
+\begin{itemize}
+\item Cell's objective was: acheive a large icnrease in performance, keeping the power
+budget samll, whilst maintaining easy programmability. 
+\item Combines a dual threaded dual issue 64 bit power architecture compliant
+proecssor eleemnt PPE with 8 newly architectured synergistic proecssor elements, and an on chip
+memory controller, and a controller for a convfigurable interface. 
+\item Have a power and area efficent PPE that supports the ghih design fruency. SPEs for coherent offload. SPEs haev lcoal memroy,
+asynchronous coherent DMA, and a large unified register filet oimrpove memeory bandwdithand to provide anew level of combined power
+efficeicny and performance. 
+\item SPE implements a new instruction set architecture optimised for 
+power and performance. 
+\item One of the big challenges is the existence of local store memory
+and the fact that software must manage that memory. 
+\end{itemize}
+\begin{itemize}
+\item Arm Little Big
+\item the observation is that the sequential part of the application should 
+run be run on powerful cores whilst parallel bits can be run on multiple msall ones. 
+\item processor designed with goal of improving energy efficency in high
+performance mobile platforms. 
+\item make the bservation that require  platofs to be accompished at hgi proecsing
+intensity tasks such as gaming and web browsing while providing long battery 
+for low processing inetnsity tasks such as texting. 
+\item key point is that though they provide different performance, they 
+have the same architecture. 
+\item When appropraite, Cortex A5 trades off energy efficiency for performanc
+while
+Cortex a8 trades off performance for energy efficiency. 
+\item don't share a level 2 cache because what they are tyring to opmise is difeferent,
+but they do share a single cache coehrent inteconnect/interrupt controller, which facilites tufll 
+coherency between the proecssor. 
+\item Different operating points to leveage dynamic voltage and frequency scaling. 
+\item Cores which are not used are explicitly powered off.
+
+\end{itemize}
+\item Emphasise point that we are explicitly talking about hardware design here, 
+not small optimisations or software. 
+
+The conclusions that we can draw is this: 
+\begin{itemize}
+\item tradeoff between sequential and complex and parallel but simple cores. 
+Also number of cores plays a part. Though more cores is good, you 
+are limited by how much parallelism there is. 
+Complex processors waste bandwdith due to 
+speculatie techniques greated towards increasing the throughput
+of each individual core. With less speculation, smaller cores can be more
+area, power and badnwdtih efficient. This effiecny allows
+a greater number of cores to be placed on chip and improves the overall
+throughput of the chil ,e ven as the throughput of each core is lower compared to a more 
+complex one. 
+\item all cores have the same performance or not. Reasoning and implications.
+Asymmetric chips can offer much better potential speedul
+becuase they use the hgily powerful core
+for the sequential parts of the code. On Chip heterogeneity allows the processor to better match
+execution resoruces to each applciation's needs and to address a much 
+wider of system laods with high efficiency.  Application
+needs are not always so simply characterised and many types
+of applciaions can benefit from either the speed of a large core or the efficncy of a msall core awt various points in their execution. 
+Some application pahses might have a large amount of instruction level parallelism (ILP) whcih can be explocited bya core that can issue many instructions per cycle. The same core however might be very inefficeint for an applciaiton pahse with little ILP, consumping singifcanty more power than a simple core that is better matched to the application's characteristics. Therefore, in additional to changes in performance over time, sngificnat changes occur int he relative performance of the candidate core.  During serial portions  portions of execution, the chip's powerbudget is appleid toward using a single large core to allow the serila portion toe xecute as quickly as possible. 
+During the parallel portions. the chips power is used more fficently bu runnign the parallel portion on a large number of small area and power efficeitn cores. Thus executing serial portions of an applciation byt relatively inefficient core ande xecution parallel portions of an algorithm on many small cores cna maximise the ratio 
+of performance to pwoer dissipation. 
+Pollack's rule: performance increase is roughly proportional to square root 
+of increase in complexity. Applying Pollack's rule, 
+performance of a msaller core reduces as square root of the size, but pwoer reduction is 
+\item heterogeneous architecture or not. Demonstrate that having hetogeneous
+(unconvential cores), can yield some huge performance guarantees, and 
+even in the cases where off chip bandwdith is scarce. 
+Custom logic and other low power U cores could potentially be used to
+reduce sequential pwoer consumption or to efficiently 
+imrpove sequential processing performance. First, if the goal is to ahchieve the same level of performance as a baseline system with proecssesos, a U Core can be used to speed up parallel sections of an application while allowing the sequetnail proecssor o slow down with a signifant reduction in power. Antoher perilsyp ropsoed method allwos a pwoer hugnry sequetnial rpecssor to offlado sectiosn of serial code to custom logic. 
+But, difficult to program. The challenge is then to develop abstractions that makes it
+not too hard to use them, like Dandelion for example or Hera JVM. 
+\item memory coherent or not. 
+\end{itemize}
+\end{itemize}
