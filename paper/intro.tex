@@ -1,0 +1,54 @@
+\section{Introduction}
+
+\begin{itemize}
+\item Recent years: single cores getting much more powerful,
+both in terms of raw performance (insert an example), 
+memory latency (insert an example), etc.
+\item This has been enabled by the increasing
+number of transistors per chip thanks to Moore's law. 
+\item in turn has allowed for 
+smart techniques which allow to exploit increasing
+levels of instruction level parallelism 
+\item Unfortunately, this trend can no longer
+continue, for number of reasons:
+\begin{itemize}
+\item clock rates have reached a maximum. Wire delays
+rather than tarnsistor switching are now the dominant
+issue for each clock cycle. Reaching a physical limit of clock
+skew as well.  
+There's also the additional hig power conusmption associated
+with a high clock rate (Details) 
+\item Complexity of design associated with deeper pipelines,
+complex branch prediciton logic and instruction level reordering
+means that static and dynamic power usage is very high
+\item Little instruction level parallelism to exploit.  
+\end{itemize}
+\item From this, there's one conclusion. Hardware developers are not 
+interested simply in building better performing systems, they 
+are interested in building better performing systems within a given
+power budget. In that context, no further improvements for unicore
+processors are likely to happen. 
+\item In this context, new approach is required. The advances
+in sillicon which allow multiple cores to be placed on the same
+chip have encouraged new architectures to be developed
+which focus on placing multiple chips per core. 
+\item The rise to many-core systems, by definition either necessarily 
+introduces, or allows the introduction of heterogeneity in three ways: 
+\begin{itemize}
+\item heterogeneity between machines: huge number of permutations
+off chip on chip, ring/mesh interconnects, homogeneous cores, 
+heterogeneous cores, number of cores, fully coherent or not, etc.
+\item heterogeneity within machines: non uniform access time
+to memory, IO devices, etc.
+\item heterogeneity amongst processors: different ISAs, communication
+\end{itemize}
+\item We begin by providing a brief overview of how the various
+kinds of heterogeneity manifest themselves. We then
+focus on how heterogeneity is leveraged or managed for the
+competing goals of power, performance, and programmability.
+More specificcally, how performance and programmability can be maximised
+within a given power budget.
+\end{itemize}
+
+
+
