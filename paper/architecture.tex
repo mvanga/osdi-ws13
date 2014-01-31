@@ -34,7 +34,7 @@ This comes at the expense of high power consumption,
 though most designs incorporate some power
 saving techniques, including but not limited to, dynamic 
 voltage scaling, processing gating, etc.
-The i7 Intel Core 920 for example contains 4 cores which aggresively
+\paragraph{} The i7 Intel Core 920 for example contains 4 cores which aggresively
 exploit ILP through a four issue,  dynamically scheduled 16 stage pipeline,
 and multilevel branch prediction unit. All cores own
  private L1 and L2 caches, and share the L3 cache. They communicate
@@ -88,7 +88,8 @@ application-specific devices, such as GPUs or FPGAs which can achieve extremely
 high performance in specific cases. Appropriately scheduling each 
 task on the appropriate core complicates the task of the OS scheduler.
 Programming for multiple ISAs increases the complexity of a developer's code. 
-The Cell BE illustrates the benefits obtainable with heterogeneous
+
+\paragraph{}The Cell BE illustrates the benefits obtainable with heterogeneous
 cores with distinct ISAs. The processor combines a 
 dual issue general power architecture compliant core (Power Processing Element), and 8 ``coprocessors''
 cores (Synergistic Processing Elements). These implement a new instruction sete
@@ -106,13 +107,38 @@ to the SPEs. Having a specialised architecture set optimised for power was
 because of the stated objective: icnrease a large icnrease in performance,
 keeping the pwoer budget small.  It's worth to note though that the 
 fully coherent DMA does make things easier.  Cell BE is used in 
-many game consoles.
-
-\paragraph{}A similar design decision was taken in the Nvida Tigra 2, which is 
+many game consoles. A similar design decision was taken in the Nvida Tigra 2, which is 
 a processor geared towards mobile systems. It integrates a dual
 core ARM Cortex A9 and GPU on a single chip using a single physical memory. 
 
-
+\paragraph{} The BigLittle processor struck a different tradeoff,
+and expressly chose to have cores of different capabilities, but
+with the same instruction set. The Arm LittleBig is a processor
+deisgned with the goal of improving power effiency in high
+performance mobile platforms, where there is a combination
+of computationally expensive, latency tasks such as gaming
+, while providing long battery for low processing intensity tasks such
+as texting. They make the observation that
+sequential parts of the application should be run
+on powerful cores whilst parallel parts, which can leverage data
+level parallelism or thread level parallelism, should be run
+on multiple small cores. The chip has two types of cores
+on it: the CortexA15 and the Coretex17. The Cortex7 is an in order dual issue
+processor with a short pipeline (8 to 10 stages). By contrast,  the CortexA15
+ is an out-of-order triple issue superscalar processor
+which uses aggressive branch prediction and has a very deep pipeline
+(between 15 and 24 stages).  When approparite, the Cortex A15 trades off energy
+efficeicny for performance, while the Corte A7 trades off perfromance for energy efficiency.
+Each can operate at a number of different oeprating points. This allows the OS 
+to match the performance of the platform to the performance required by the application. 
+There is a single cache coherent interconnect,  which 
+facilitates full coherency between the two processors. 
+This is important to note here, that it isn't the same tradeoff
+as the i7 and the Tilera cores made, where the decision was between
+a small number of powerful cores and a large number of simple cores. 
+Here it's about given an application the performance it needs to function,
+for the lowest possible budget, and this is achieved by a combination of 
+using the simplest core possible for the job and operating points. 
 
 \subsection{Identified tradeoffs}
 TODO: need to make sure link back to core theme. 
@@ -120,10 +146,32 @@ TODO: need to make sure link back to core theme.
 The previous section gave an overview of the main types of multicore systems, 
 and motivated their design choices based on their target applications. 
 We expand on the major tradeoffs observed and discuss current research efforts in the area. 
-\paragraph{Core Performance vs Number of Cores}
+\paragraph{Core Performance and Number of Cores}
+\begin{itemize}
+\item Powerful cores good for sequential execution but expensive
+in terms of power. Focus on ILP. Wasteful in terms of power. 
+\item More simple cores better because of (give mathematical reasoning)
+\item Having multiple simple cores also allows you to better tailor
+performance, using processor gating, voltage scaling, sleep mode. 
+\item But not always: Ahdahmls' law, so bound by the sequential performance
+\item Has some implications that introduces non-uniformity in the machines. 
+\item Has some implications for the interconnect, now somehow needs to scale,
+same for memory 
+\item Also has the issue that puts the onus on the programmer to manage 
+resources appropriately, and adapt to multicore. Has shown in 
+the Analysis paper, not necessarity the case. Similaryl, 
+also need to adapt programming model, so in seeking to maximise 
+performance with respect to power, they are adding some complexity, 
+and the onus is now on the programmer to adapt to this change. 
+\item Additional consideration: not all applications require the fastest
+possible performance. Operating points + lesser performing cores
+are a good thing. 
+\end{itemize}
 \paragraph{Core Capabilities}
+
 \paragraph{Instruction Set Compatibility }
 \paragraph{Memory Coherency}
+\paragraph{Specialisation vs Generality}
 
 These various axis highlight varying degrees of heterogeneity both within
 machines and across machines. Heterogeneity is a natural consequence of 

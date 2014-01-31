@@ -1,0 +1,48 @@
+\section{Draft Skeleton}
+\begin{itemize} 
+\item Introduction and overview. This should frame the problem,
+give an overview of everything, and specify exactly what we're specifically
+going to focus on, or conversely ignore
+\begin{itemize}
+\item Shift to multicore and manycore
+\begin{itemize}
+\item Out of necessity due to the triple hurdle of lack of ILP, power consumption,
+and usual blurb. Key point, out of necessity!
+\item What is a multi-core/many-core machine, in brief (keeping it brief)?
+\begin{itemize}
+\item Focus on the 4 architectures that we have
+\item Distinction between many core / multi core
+\item Distinction between homogeneous cores / heterogeneous cores
+\item Coherent memory or not, etc. 
+\end{itemize}
+\item What are the main consequences of the shift to many-core/multi-core?
+\begin{itemize}
+\item Heterogeneity across different machines: more diversity in how 
+computers are constructed. harder to adapt
+\item Heterogeneity within a machine: \\
+- When it comes to communication (IPC, interconnects, NUMA) \\ 
+- When it comes to the processing power, functionalities of 
+different cores \\
+\end{itemize}
+\item Shifting from a predominantly single threaded model where we can exploit
+ILP to a predominantly parallel model where we must predominantly exploit TLP. 
+\end{itemize}
+\item There's three avenues that need to be considered potentially:
+\begin{itemize}
+\item Hardware level, how do you design new processors
+\item OS level, how do you design your OS for a potentially highly heterogeneous
+many-core processor
+\item Application, how do you design an application to deal with this, and the high
+level of parallelism that one can exist. 
+\end{itemize}
+\item At each of this three levels, design decisions make an explicit tradeoff
+between
+\begin{itemize}
+\item Power
+\item Performance
+\item Programmibility
+\end{itemize}
+\end{itemize}
+\item In this paper, we present a taxonomy of the hardware and software
+design decisions etc 
+\end{itemize}
