@@ -1,5 +1,43 @@
 \section{Introduction}
 
+
+
+Recent years have seen the rise of commodity-off-the-shelf (COTS) multi-core and many-core platforms, which introduce new dimensions of complexity. In particular, both hardware and software designers alike must now consider tradeoffs with regard to power consumption, programmability and performance. These tradeoffs are the result of the introdution of heterogeneity into modern multi-core architectures and this paper attempts to demystify the different kinds of heterogeneity that is encountered as well as the hardware and software tradeoffs that must now be made.
+
+In the past few decades, single-core processors became more powerful both in terms of raw performance as well as memory latency. Rapid improvements in the  manufacturing process, obeying Moore's law, led to an increase in the number of transistors per chip allowing manufacterers to exploit increasing levels of instruction-level parallelism. Additionally, these improvements allowed the scaling of processor and memory controller frequencies, improving memory latency and increasing the operations-per-second.
+
+However, the early 2000's saw manufacturers hitting the limits of frequency scaling which resulted in sub-linear improvements in performance with respect to power consumption.
+
+\subsection{The Power Consumption Problem}
+
+
+There are two main factors that contribute to the power consumption of a CPU: dynamic power consumption and transistor leakage currents. Dynamic power consumption is a result of the swithing on and off of transistors in the processor during operation. The extent to which this occurs is dependent on the program logic and the design of the hardware. The second main factor affecting power consumption is the leakage current that is always flowing between the differently doped parts of a semiconductor. This current tends to be proportional to the temperature of the chip and inversely proportional to the size of the chip. There is also an additional factor known as short-circuit power consumption that is caused by the transient shorting of the power supply when transistors switch states (caused by the simultaneous conducting of multiple transistors). \cite{ftp://download.intel.com/design/network/papers/30117401.pdf}
+
+As chips used smaller transistors and ran with higher frequencies (resulting in higher temperatures), the dynamic power consumption as well as short-circuit power consumption increased. The problem of increasing leakage-circuit current was tackled largely by lowering the supply voltage of processors.
+
+However, the power required to cool chips with higher frequencies, the power required to maintain higher frequencies resulted in the introduction of commercial multi-core processors around 2006 (the Intel XXX).
+
+\subsection{The Rise and Fall of Processor Complexity}
+
+Over the past few decades, the major trend towards improving processor performance has been the introduction of deeper pipelines, which have been accompanied by complex branch-prediction logic to reduce the number of pipeline flushes. Along with instruction reordering logic, this added complexity affects both static and dynamic power consumption significantly. Since power consumption has become a major concern when designing hardware, there has been a trend towards a larger number of simpler cores that use fewer transistors \cite{many-core} over architectures consisting of few very powerful, complex cores \cite{multi-core}.
+
+Today, hardware developers are not interested simply in building better performing systems, they are interested in building better performing systems within a given power budget. In that context, further improvements to unicore processors are unlikely to happen.
+
+The new approach adopted by manufacturers today is the integration of multiple chips onto a single piece of silicon each of which further contain multiple cores; a trend that has again been supported by advances in the manufacturing process.
+
+With the possible combinations now available to manufacturers, almost every modern architecture now exhibits variations of characteristics within individual chips itself; a phenomenon termed heterogeneity.
+
+\subsection{The Age of Heterogeneity}
+The rise of many-core systems, which results in an explosion of design choices for manufacturers, either necessarily introduces, or enables the introduction of heterogeneity in two ways that need to be considered by software developers.
+\begin{itemize}
+\item \textbf{Heterogeneity between machines.} There are a huge number of combinations that result from the vast range of possible interconnects, possible ISA's, the number and topology of cores, as well as memory architectures. This results in environments where software must support the inter-operability between a multitude of combinations.
+\item \textbf{Heterogeneity within a machine.} Within a single machine itself, non-uniform access time to memory, peripheral devices, and other cores (\ie communication between cores), as well as the possibility of multiple ISA's, different interconnects \etc, leads to significant variations of performance characteristics amongst cores.
+\end{itemize}
+
+In this paper, we explore how the various kinds of heterogeneity manifest themselves in modern computer architectures. We then focus on how heterogeneity affects the often competing goals of power management, improved performance, and programmability.
+
+
+\section{Old Intro}
 \begin{itemize}
 \item Recent years: single cores getting much more powerful,
 both in terms of raw performance (insert an example), 
@@ -53,6 +91,3 @@ More specificcally, how performance and programmability can be maximised
 within a given power budget.
 (note: wheras innovation in architectures can unlock new lvels pf performance and or power effiency, it must be possible to achieve good performance with reasoable amunt of programming effort, if potential imrpovements are to be realised)
 \end{itemize}
-
-
-
