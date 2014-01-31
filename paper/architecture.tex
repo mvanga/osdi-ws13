@@ -1,4 +1,147 @@
+
 \section{Multicore Architectures}
+This section surveys the major architectural decisions of modern multicore 
+architectures. It identifies three broad categories:
+architectures with a small number of powerful cores, designs with large number of simple, homogeneous cores, and
+finally, processors which explicitly associate
+cores of varying capabilities and instructions sets.
+We compare and contrast the motivation behind these
+design decisions and their impact on the competing
+concerns of power, performance, programmability.
+We observe that these reflect the diversification of computing
+amonst different application domains. Processors for mobile devices
+optimise for performance, reactivty and energy. Processors for desktop, 
+optimise for cost-performance and  graphics. By contrast,
+servers prioritise throughput, scaiability and energy, whilst
+embedded devices optimise for energy, and application-specific
+performance. 
+
+\subsection{Architecture Overview}
+
+We describe each category in turn, focusing on the main 
+considerations which motivated the design, and illustrate
+with a specific example.
+
+\paragraph{Small number of complex high performance cores}
+Various architectures place a small number (2-8) of highly
+powerful cores on a chip.  Cores are homogeneous, fully cache-coherent,
+and generally own a private cache, but share the last level cache. 
+Each core aggressively exploits instruction level parallelism, through
+out-of-order execution, speculation, very deep pipelines, etc. 
+These designs first and foremost optimise sequential performance, 
+and leverage instruction level parallelism over thread level parallelism. 
+This comes at the expense of high power consumption, 
+though most designs incorporate some power
+saving techniques, including but not limited to, dynamic 
+voltage scaling, processing gating, etc.
+The i7 Intel Core 920 for example contains 4 cores which aggresively
+exploit ILP through a four issue,  dynamically scheduled 16 stage pipeline,
+and multilevel branch prediction unit. All cores own
+ private L1 and L2 caches, and share the L3 cache. They communicate
+through a ring based interconnect. These architectures are
+optimised for desktop style applications, where many applications continue
+to be designed with uniprocessors in mind, and are therefore mostly sequential.
+Ahmdahl's law states that the speedup optained by increasing parallelism 
+is bounded by the sequential part of the application. Powerful processors are 
+thus required to maintain good performance for these applications. 
+Adding more cores simply allows for new optimisations to be explored, namely, 
+thread level parallelism, over the diminishing returns obtained by trying
+to further exploit ILP. 
+
+
+\paragraph{Large Number of Simple, Low Frequency Cores} An alternative
+design strategy consists in placing a larger number of simpler, lower frequency cores
+onto the chip. Simpler cores consume significantly less power as
+a result of the combined effect of 1) less static power consumption because 
+of fewer components on the chip 2) the ability to scale voltage down as
+the clock rate is smaller. ADD OTHER REASON. The Tilera
+architecture integrates a large number of low power, low frequency 
+cores (. Each processor is a compile-time scheduled three way VLIW processors.
+Compile time scheduling of VLIW operations results in significantly
+lower power usage than a dynamically scheduled superscalar
+processor like the i7. Cores are homogeneous and share 
+an instruction set to make it easier for applications to run on
+this architecture.  The interconnect is a point to point mesh network, which
+is highly scalable and minimises wire delays between cores. This
+contrasts with the traditional ring based architecture, which,
+through memory coherency protocols, quickly becomes a bottleneck
+as the number of cores grows. Each
+core has a private cache. All share a fully coherent dynamic
+distributed L3 cache.  This design allows for high performance
+if the workload is highly parallelisable. This is the case for many 
+server workloads which optimise for throughput, and who require
+the ability to scale whilst satisfying a low power budget.  
+
+\paragraph{Heterogeneous Cores} The first category optimised for 
+sequential performance and programmability at the expense of power. The second, 
+for throughput, power and programmability at the expense of sequential performance. 
+Core homogeneity, both in terms of instruction set and capability,
+was key to facilitate application development by users. The last category
+of multicore processors, by contrast, explicitly optimises both
+power and performance, at the expense of programmibility. They do so in two ways: 
+by associating cores with different capabilities on a chip, and possibly components
+with different ISAs. This allows them to run tasks on the core
+that is best suited for that workload: a mostly sequential taks will be run 
+on a highly powerful core, whilst an easliy parraleisable workload
+will be run on multiple simple cores. Similarly, certain chips incorporate
+application-specific devices, such as GPUs or FPGAs which can achieve extremely
+high performance in specific cases. Appropriately scheduling each 
+task on the appropriate core complicates the task of the OS scheduler.
+Programming for multiple ISAs increases the complexity of a developer's code. 
+The Cell BE illustrates the benefits obtainable with heterogeneous
+cores with distinct ISAs. The processor combines a 
+dual issue general power architecture compliant core (Power Processing Element), and 8 ``coprocessors''
+cores (Synergistic Processing Elements). These implement a new instruction sete
+architecture optmised for power and performance.  The PPE has control over the SPE
+and decides of task allocations, which processes to run, etc. SPEs can only 
+access their own local memory, and rely on DMA for all other forms of computation.
+The system impleents a fully cache coherent DMA to access both memory and disk. 
+The PPE and all the SPEs communicate via a high bandwdith bus. 
+Programming on the Cell presents two challenges: firstly, the different kinds of 
+instruction sets present. And secondly, the existence of local store memory and the
+fact that software must manage that memory. The choice of having two different instruction
+sets can be explained by the desire to be able to run a standard OS one the main 
+core whilst uploading computationally intensive/highly parallel work 
+to the SPEs. Having a specialised architecture set optimised for power was
+because of the stated objective: icnrease a large icnrease in performance,
+keeping the pwoer budget small.  It's worth to note though that the 
+fully coherent DMA does make things easier.  Cell BE is used in 
+many game consoles.
+
+\paragraph{}A similar design decision was taken in the Nvida Tigra 2, which is 
+a processor geared towards mobile systems. It integrates a dual
+core ARM Cortex A9 and GPU on a single chip using a single physical memory. 
+
+
+
+\subsection{Identified tradeoffs}
+TODO: need to make sure link back to core theme. 
+
+The previous section gave an overview of the main types of multicore systems, 
+and motivated their design choices based on their target applications. 
+We expand on the major tradeoffs observed and discuss current research efforts in the area. 
+\paragraph{Core Performance vs Number of Cores}
+\paragraph{Core Capabilities}
+\paragraph{Instruction Set Compatibility }
+\paragraph{Memory Coherency}
+
+These various axis highlight varying degrees of heterogeneity both within
+machines and across machines. Heterogeneity is a natural consequence of 
+trying to maximise performance within a given power budget. It did not arise
+out of choice but rather as the only possible solution for continuing to guarantee
+good performance for a wide range of workload. The stringent requirements
+on power fostered increased coupling between various hardware components.
+X  highlights that, to come up with an optimal solution, all hardware components
+should be codesigned. The shift from maximising performance to maximising performance
+per watt increased specialisation of entire processors (for desktop, mobiles,
+servers, etc.), but also of components within each processor. 
+
+In the remainder of this paper, we survey how applications and operating
+systems deal with internal and external heterogeneity in machines. 
+In doing so, we observe two broad strategies: masking or exposing heterogeneity. 
+
+
+\section{Multicore Architectures - Old}
 \begin{itemize}
 \item This section describes the three broad trends exhbited in designing
 multicore systems. We compare and contrast the motivation
@@ -112,123 +255,3 @@ not too hard to use them, like Dandelion for example or Hera JVM.
 \end{itemize}
 
 \pagebreak 
-
-\section{Multicore Architectures}
-This section surveys the major architectural decisions of modern multicore 
-architectures. It identifies three broad categories:
-architectures with a small number of powerful cores, designs with large number of simple, homogeneous cores, and
-finally, processors which explicitly associate
-cores of varying capabilities and instructions sets.
-We compare and contrast the motivation behind these
-design decisions and their impact on the competing
-concerns of power, performance, programmability.
-We observe that these reflect the diversification of computing
-amonst different application domains. Processors for mobile devices
-optimise for performance, reactivty and energy. Processors for desktop, 
-optimise for cost-performance and  graphics. By contrast,
-servers prioritise throughput, scaiability and energy, whilst
-embedded devices optimise for energy, and application-specific
-performance. 
-
-\subsection{Architecture Overview}
-
-We describe each category in turn, focusing on the main 
-considerations which motivated the design, and illustrate
-with a specific example.
-
-\paragraph{Small number of complex high performance cores}
-Various architectures place a small number (2-8) of highly
-powerful cores on a chip.  Cores are homogeneous, fully cache-coherent,
-and generally own a private cache, but share the last level cache. 
-Each core aggressively exploits instruction level parallelism, through
-out-of-order execution, speculation, very deep pipelines, etc. 
-These designs first and foremost optimise sequential performance, 
-and leverage instruction level parallelism over thread level parallelism. 
-This comes at the expense of high power consumption, 
-though most designs incorporate some power
-saving techniques, including but not limited to, dynamic 
-voltage scaling, processing gating, etc.
-The i7 Intel Core 920 for example contains 4 cores which aggresively
-exploit ILP through a four issue,  dynamically scheduled 16 stage pipeline,
-and multilevel branch prediction unit. All cores own
- private L1 and L2 caches, and share the L3 cache. They communicate
-through a ring based interconnect. These architectures are
-optimised for desktop style applications, where many applications continue
-to be designed with uniprocessors in mind, and are therefore mostly sequential.
-Ahmdahl's law states that the speedup optained by increasing parallelism 
-is bounded by the sequential part of the application. Powerful processors are 
-thus required to maintain good performance for these applications. 
-Adding more cores simply allows for new optimisations to be explored, namely, 
-thread level parallelism, over the diminishing returns obtained by trying
-to further exploit ILP. 
-
-
-\paragraph{Large Number of Simple, Low Frequency Cores} An alternative
-design strategy consists in placing a larger number of simpler, lower frequency cores
-onto the chip. Simpler cores consume significantly less power as
-a result of the combined effect of 1) less static power consumption because 
-of fewer components on the chip 2) the ability to scale voltage down as
-the clock rate is smaller. ADD OTHER REASON. The Tilera
-architecture integrates a large number of low power, low frequency 
-cores (. Each processor is a compile-time scheduled three way VLIW processors.
-Compile time scheduling of VLIW operations results in significantly
-lower power usage than a dynamically scheduled superscalar
-processor like the i7. Cores are homogeneous and share 
-an instruction set to make it easier for applications to run on
-this architecture.  The interconnect is a point to point mesh network, which
-is highly scalable and minimises wire delays between cores. This
-contrasts with the traditional ring based architecture, which,
-through memory coherency protocols, quickly becomes a bottleneck
-as the number of cores grows. Each
-core has a private cache. All share a fully coherent dynamic
-distributed L3 cache.  This design allows for high performance
-if the workload is highly parallelisable. This is the case for many 
-server workloads which optimise for throughput, and who require
-the ability to scale whilst satisfying a low power budget.  
-
-\paragraph{Heterogeneous Cores} The first category optimised for 
-sequential performance and programmability at the expense of power. The second, 
-for throughput, power and programmability at the expense of sequential performance. 
-Core homogeneity, both in terms of instruction set and capability,
-was key to facilitate application development by users. The last category
-of multicore processors, by contrast, explicitly optimises both
-power and performance, at the expense of programmibility. They do so in two ways: 
-by associating cores with different capabilities on a chip, and possibly components
-with different ISAs. This allows them to run tasks on the core
-that is best suited for that workload: a mostly sequential taks will be run 
-on a highly powerful core, whilst an easliy parraleisable workload
-will be run on multiple simple cores. Similarly, certain chips incorporate
-application-specific devices, such as GPUs or FPGAs which can achieve extremely
-high performance in specific cases. Appropriately scheduling each 
-task on the appropriate core complicates the task of the OS scheduler.
-Programming for multiple ISAs increases the complexity of a developer's code. 
-The Cell BE illustrates the benefits obtainable with heterogeneous
-cores with distinct ISAs. 
-Cell BE, Nvidia Tigra 2, FPGA
-
-\subsection{Identified tradeoffs}
-TODO: need to make sure link back to core theme. 
-
-The previous section gave an overview of the main types of multicore systems, 
-and motivated their design choices based on their target applications. 
-We expand on the major tradeoffs observed and discuss current research efforts in the area. 
-\paragraph{Core Performance vs Number of Cores}
-\paragraph{Core Capabilities}
-\paragraph{Instruction Set Compatibility }
-\paragraph{Memory Coherency}
-
-These various axis highlight varying degrees of heterogeneity both within
-machines and across machines. Heterogeneity is a natural consequence of 
-trying to maximise performance within a given power budget. It did not arise
-out of choice but rather as the only possible solution for continuing to guarantee
-good performance for a wide range of workload. The stringent requirements
-on power fostered increased coupling between various hardware components.
-X  highlights that, to come up with an optimal solution, all hardware components
-should be codesigned. The shift from maximising performance to maximising performance
-per watt increased specialisation of entire processors (for desktop, mobiles,
-servers, etc.), but also of components within each processor. 
-
-In the remainder of this paper, we survey how applications and operating
-systems deal with internal and external heterogeneity in machines. 
-In doing so, we observe two broad strategies: masking or exposing heterogeneity. 
-
