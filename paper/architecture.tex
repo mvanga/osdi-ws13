@@ -141,7 +141,7 @@ high performance in specific cases. Appropriately scheduling each
 task on the appropriate core complicates the task of the OS scheduler.
 Programming for multiple ISAs increases the complexity of a developer's code. 
 
-\paragraph{}The Cell Broadband Engine~\cite{kahle2005cell} illustrates the benefits obtainable with heterogeneous
+\paragraph{} The Cell Broadband Engine~\cite{kahle2005cell} illustrates the benefits obtainable with heterogeneous
 cores with distinct ISAs. The processor is optimised for gaming, and had as primary 
 requirements high performance for multimedia applications, and real-time
 responsiveness to the user and the network, hence a combination of 
@@ -164,7 +164,7 @@ through direct memory access (DMA) and synchronisation
 mechanisms, via a high bandwidth bus (memory flow control). The processor itself is full 
 custom, once again to maximise performance per watt. 
 
-The co-existence of two types of cores thus allows the Cell engine to match
+\paragraph{} The co-existence of two types of cores thus allows the Cell engine to match
 the competing requirements of latency (by executing on the PPE),
 and throughput, by offloading multimedia code to the SPEs. 
 Programming on the Cell presents two challenges: firstly, the processor
@@ -190,32 +190,39 @@ The develops of Big.LITTLE argue that sequential parts of the application
 should be run on powerful cores whilst parallel parts, which can leverage data
 level parallelism or thread level parallelism, should be run
 on multiple small cores. The chip has two types of cores
-: the CortexA15 and the CortexA17. The CortexA17 is an in-order dual issue
+: the CortexA15 and the CortexA7. The CortexA7 is an in-order dual issue
 processor with a short pipeline (8 to 10 stages). By contrast,  the CortexA15
  is an out-of-order triple issue superscalar processor
 which uses aggressive branch prediction and has a very deep pipeline
-(between 15 and 24 stages). Both share an ISA. There is a single cache
+(between 15 and 24 stages). Both share the same ISA. There is a single cache
 coherent interconnect, which facilitiates full coherency between the 
 two processors. Processes execute transparently on one core or the other.
 
-The key objective in Big.LITTLE is to precisely match the core capabilities to 
-performance requirements in order to optimise power efficiency. As such, the Cortex A15 trades off energy
-efficiency for performance, while the Corte A7 trades off performance for energy efficiency.
-Low intensity applications are executed on the Cortex A15, whilst performance critical applications
-are executed on the Cortex A17.  Each can operate at a number of different oeprating points,
-once again to match 
-This is important to note here, that it isn't the same tradeoff
-as the i7 and the Tilera cores made, where the decision was between
-a small number of powerful cores and a large number of simple cores. 
-Here it's about given an application the performance it needs to function,
-for the lowest possible budget, and this is achieved by a combination of 
-using the simplest core possible for the job and operating points. 
+\paragraph{} The key objective in Big.LITTLE is to optimise power effiency. It attempts to 
+precisely match the core capabilities to performance requirements. The Cortex A15 trades off energy
+efficiency for performance for latency sensitive applications. Performance critical applications
+can benefit from a complex processor which aggressively exploits ILP. 
+By contrast, the Cortex A7 trades off performance for energy efficiency. Low 
+intensity applications are executed on the Cortex A7 to minimise their power 
+consumption, simply ensuring that performance is ``good enough''.  The processor
+additionally has the ability to operate at different operating points. When a tasks
+exceeds the highest operating point of the Cortex A7, it is automatically migrated
+to the more powerful core. 
+
+\paragraph{} Whilst the Tile architecture and Big.Little both trade  simpler cores for 
+more complex ones, their objective are different. Tilera designs optimise
+for highly parallelisable applications and trade a small number of 
+complex cores for a large number of simple ones. Big.Little does not
+tradeoff core complexity for number of cores, but attempts to improve
+the power efficiency of largely sequential applications, with differing
+performance requirements,  by precisely tailoring the core performance to what
+the application requires to function correctly. 
 
 \subsection{Identified tradeoffs}
-TODO: need to make sure link back to core theme. 
 
 The previous section gave an overview of the main types of multicore systems, 
 and motivated their design choices based on their target applications. 
+It illustrated the 
 We expand on the major tradeoffs observed and discuss current research efforts in the area. 
 All of these introduce and characterise the internal and external heterogeneity that 
 modern multicores exhibit. 
