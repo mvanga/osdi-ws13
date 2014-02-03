@@ -43,7 +43,7 @@ These designs first and foremost optimise sequential performance,
 and leverage instruction level parallelism over thread level parallelism. 
 This comes at the expense of high power consumption, 
 (although most designs incorporate some power
-saving techniques like voltage scaling, processing gating, etc.)
+saving techniques)
 \paragraph{} The i7 Intel Core 920 contains 4 cores which aggresively
 exploit ILP through a four issue,  dynamically scheduled 16 stage pipeline,
 and multilevel branch prediction unit. All cores own
@@ -66,19 +66,30 @@ little ILP. As performance is bound by the sequential parts of an application,
 complex cores are required to guarantee good performance. 
 Adding more cores simply allows for new optimisations to be explored, namely, 
 thread level parallelism, over the diminishing returns obtained by trying
-to further exploit ILP.  Secondly, programmers often expect to preserve the 
-simple programming models that they used
-on uniprocessors. As a result, processors like the i7 put a lot of effort in exposing
+to further exploit ILP.  Secondly, programmers often expect the 
+sequential that they used on uniprocessors to be preserved. 
+As a result, processors like the i7 put a lot of effort in exposing
 a simple programming model, and hiding much of the underlying complexity, through
 uniform cores, strong memory coherency, etc. 
-
+The i7 distinguishes itself by its Turbo Boost technique (TODO: finish)
 
 
 \paragraph{Large Number of Simple, Low Frequency Cores} An alternative
 design strategy consists in placing a larger number of simpler, lower frequency cores
-onto the chip.  ADD OTHER REASON. The Tilera
-architecture integrates a large number of low power, low frequency 
-cores (. Each processor is a compile-time scheduled three way VLIW processors.
+onto the chip. For the majority of architectures that follow these patterns, 
+cores are homogeneous and are fully memory coherent. These architectures are
+geared towards server workloads. These workloads are mostly highly parallelisable,
+and throughput sensitive. They additionally require the ability
+to scale whilst keeping power consumption low. 
+ The designs therefore seek to optimise throughput whilst minimising power
+consumption. They do so by exploiting a new kind of parallelism, thread-
+level-parallelism (TLP). This allows for different parallel parts of the application
+to be executed simultaneously on different cores, increasing performance. The
+weaker latency requirements allows for applications
+
+\paragraph{} The Tilera architecture integrates a large number of low power, 
+low frequency cores (. Each processor is a compile-time scheduled 
+triple-issue VLIW processor.
 Compile time scheduling of VLIW operations results in significantly
 lower power usage than a dynamically scheduled superscalar
 processor like the i7. Cores are homogeneous and share 
@@ -198,7 +209,7 @@ performance, using processor gating, voltage scaling, sleep mode.
 \item But not always: Ahdahmls' law, so bound by the sequential performance
 \item Has some implications that introduces non-uniformity in the machines. 
 \item Has some implications for the interconnect, now somehow needs to scale,
-same for memory 
+same for memory, currently become a bottleneck
 \item Also has the issue that puts the onus on the programmer to manage 
 resources appropriately, and adapt to multicore. Has shown in 
 the Analysis paper, not necessarity the case. Similaryl, 
