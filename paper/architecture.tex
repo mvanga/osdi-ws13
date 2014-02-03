@@ -78,32 +78,49 @@ The i7 distinguishes itself by its Turbo Boost technique (TODO: finish)
 design strategy consists in placing a larger number of simpler, lower frequency cores
 onto the chip. For the majority of architectures that follow these patterns, 
 cores are homogeneous and are fully memory coherent. These architectures are
-geared towards server workloads. These workloads are mostly highly parallelisable,
-and throughput sensitive. They additionally require the ability
-to scale whilst keeping power consumption low. 
- The designs therefore seek to optimise throughput whilst minimising power
-consumption. They do so by exploiting a new kind of parallelism, thread-
+geared towards server workloads, that is, applications which  are mostly highly 
+parallelisable, and throughput sensitive. They additionally require the ability
+to scale whilst keeping power consumption low.   The design decisions therefore
+ optimise throughput whilst minimising power consumption. 
+They do so by exploiting a new kind of parallelism, thread-
 level-parallelism (TLP). This allows for different parallel parts of the application
-to be executed simultaneously on different cores, increasing performance. The
-weaker latency requirements allows for applications
+to be executed simultaneously on different cores. The looser latency 
+requirements reduces the need for the - likely short - sequential
+parts of the application to finish quickly. This in turn signifies that
+there is no need to aggressively exploit ILP. Individual cores can thus be 
+simpler, and run at a lower frequency. This reduces the static and dynamic
+power consumption of each core, and allows cores to occupy a smaller
+area, thus allowing to place more cores on a chip, which further increases throughput. 
 
-\paragraph{} The Tilera architecture integrates a large number of low power, 
-low frequency cores (. Each processor is a compile-time scheduled 
-triple-issue VLIW processor.
-Compile time scheduling of VLIW operations results in significantly
-lower power usage than a dynamically scheduled superscalar
-processor like the i7. Cores are homogeneous and share 
-an instruction set to make it easier for applications to run on
-this architecture.  The interconnect is a point to point mesh network, which
+
+\paragraph{} The Tilera architecture thus integrates a large number of low power, 
+low frequency cores ~\cite{wentzlaff2007tile}. The TilePro64 processor contains 
+64 cores, each operating at a frequency of 866 Mhz. This contrasts heavily
+with the 4 cores of the i7, which each operated at a frequency of 2.66 Ghz (2.93 with
+Turbo Boost)  Each tile is a compile-time scheduled triple-issue VLIW processor with 
+a pipeline depth of only 5. Scheduling VLIW operations at compile time is 
+significantly more power efficient
+than relying on dynamic scheduling like most superscalar processors do (due to
+static branch prediction and lack of out-of-order execution). Similarly,
+reducing the pipeline depth to 5 (as opposed to 19 like the i7) reduces
+power consumption. 
+It is however more restrictive in the ILP that it can exploit. Cores are homogeneous and share 
+an instruction set. This design decision was taken specifically to make it 
+easier for applications to run on this architecture~\cite{wentzlaff2007tile}. Each
+tile has a private cache. All share a fully coherent dynamic
+distributed L3 cache.  The interconnect is a point to point mesh network, which
 is highly scalable and minimises wire delays between cores. This
-contrasts with the traditional ring based architecture, which,
-through memory coherency protocols, quickly becomes a bottleneck
-as the number of cores grows. Each
-core has a private cache. All share a fully coherent dynamic
-distributed L3 cache.  This design allows for high performance
-if the workload is highly parallelisable. This is the case for many 
-server workloads which optimise for throughput, and who require
-the ability to scale whilst satisfying a low power budget.  
+contrasts with the traditional ring based architecture, adopted for example
+in the i7,  which, partly due to memory coherency protocols, quickly becomes a bottleneck
+as the number of cores grows. Cache coherence is maintained
+through each core having a home core, responsible for tracking
+which cores share the cacheline. This directory based approach is significantly
+more scalable than the traditional bus snooping technique.  This design allows for good performance
+if the workload is highly parallelisable, but most
+importantly, it provides the ability to scale whilst satisfying a low power budget. 
+A Facebook study found that a task-parallel workload running on the TilePro64 exhibited
+67\% higher throughput, whilst using 3 times less power than the corresponding
+execution on an x86 based processor~\cite{berezecki2011manycore}. 
 
 \paragraph{Heterogeneous Cores} The first category optimised for 
 sequential performance and programmability at the expense of power. The second, 
@@ -254,7 +271,11 @@ are time critical, it is possible to run them on
 less powerful hardware for example, this allows you to trade
 power for performance. This has some implications for the OS
 which now needs to know how much is ``good enough'' for the 
-task it is running. 
+task it is running. Examples include low intensity 
+tasks in mobile phones. Other examlpes include the ability 
+to run a key value store on wimpy nodes ~\cite{andersen2009fawn} (nodes powered
+by a low power CPU), but this is not approaprite for all workloads~\cite{lang2010nonwimpy}.
+Part of the reason there is because of network latency. 
 \item The third observation is that most computers have to run 
 a mix of workloads, tasks which are both throuhgput sensitive
 and latency sensitive for example, tasks which are not time critical,
