@@ -1,0 +1,25 @@
+\section{Conclusion}
+
+\paragraph{}Multicore processors exhibit significant heterogeneity, through processor or core specialisation, in a bid
+to maximise the performance-power ratio. Our 
+survey of heterogeneity identified a tension :
+whilst computer architecture research increased
+the specialisation of processors and individual cores,
+often at the expense of programmibility, 
+operating system and applications have generally 
+hidden heterogeneity from developers. Most processors 
+continue to use variants of Linux independent of
+whether they are servers or desktop computers. 
+Whilst modern OSes are NUMA-aware, they are not specialised for the underlying architecture
+Inter-machine heterogeneity is relatively poorly taken into account. Similarly, 
+few applications are able to exploit intra-machine
+heterogeneity due to a lack of consistent primitives exposing it. (TODO rephrase)
+
+
+\paragraph{} Our survey thus suggests that OS and software research should focus on two directions:
+firstly, on designing operating systems
+optimised for specific comptuer designs, and secondly, 
+on identifying the correct ways to expose heterogeneity
+to applications. Helios~\cite{nightingale2009helios} and Barrelfish's System Knowledge Base ~\cite{schupbach08embracingdiversity} are steps in that direction. 
+
+
