@@ -2,9 +2,11 @@
 \section{Multicore Architectures}
 \paragraph{}  This section surveys the major architectural decisions of modern multicore 
 architectures. The high heterogeneity that multicore architectures exhibit
-reflects the dual objectives of optimising performance
-for a given power budget on the one hand, and reducing power
-consumption whilst keeping power constant, on the other. 
+reflects the dual objectives of improving power effiency:
+optimising performance within a given power budget on the one hand, 
+and reducing power consumption whilst maintaining performance on the other.
+
+
 
 \paragraph{} \emph{Inter-machine heterogeneity} can be explained by the
 increased specialisation of  architectures for specific usecases. Chips for
@@ -108,14 +110,14 @@ It is however more restrictive in the ILP that it can exploit. Cores are homogen
 an instruction set. This design decision was taken specifically to make it 
 easier for applications to run on this architecture~\cite{wentzlaff2007tile}. Each
 tile has a private cache. All share a fully coherent dynamic
-distributed L3 cache.  The interconnect is a point to point mesh network, which
+distributed L3 cache.  Cache coherence is maintained
+through each core having a home core, responsible for tracking
+which cores share the cacheline. This directory based approach is significantly
+more scalable than the traditional bus snooping technique.  The interconnect is a point to point mesh network, which
 is highly scalable and minimises wire delays between cores. This
 contrasts with the traditional ring based architecture, adopted for example
 in the i7,  which, partly due to memory coherency protocols, quickly becomes a bottleneck
-as the number of cores grows. Cache coherence is maintained
-through each core having a home core, responsible for tracking
-which cores share the cacheline. This directory based approach is significantly
-more scalable than the traditional bus snooping technique.  This design allows for good performance
+as the number of cores grows. This design allows for good performance
 if the workload is highly parallelisable, but most
 importantly, it provides the ability to scale whilst satisfying a low power budget. 
 A Facebook study found that a task-parallel workload running on the TilePro64 exhibited
@@ -139,50 +141,69 @@ high performance in specific cases. Appropriately scheduling each
 task on the appropriate core complicates the task of the OS scheduler.
 Programming for multiple ISAs increases the complexity of a developer's code. 
 
-\paragraph{}The Cell BE illustrates the benefits obtainable with heterogeneous
-cores with distinct ISAs. The processor combines a 
-dual issue general power architecture compliant core (Power Processing Element), and 8 ``coprocessors''
-cores (Synergistic Processing Elements). These implement a new instruction sete
-architecture optmised for power and performance.  The PPE has control over the SPE
-and decides of task allocations, which processes to run, etc. SPEs can only 
-access their own local memory, and rely on DMA for all other forms of computation.
-The system impleents a fully cache coherent DMA to access both memory and disk. 
-The PPE and all the SPEs communicate via a high bandwdith bus. 
-Programming on the Cell presents two challenges: firstly, the different kinds of 
-instruction sets present. And secondly, the existence of local store memory and the
-fact that software must manage that memory. The choice of having two different instruction
-sets can be explained by the desire to be able to run a standard OS one the main 
-core whilst uploading computationally intensive/highly parallel work 
-to the SPEs. Having a specialised architecture set optimised for power was
-because of the stated objective: icnrease a large icnrease in performance,
-keeping the pwoer budget small.  It's worth to note though that the 
-fully coherent DMA does make things easier.  Cell BE is used in 
-many game consoles. A similar design decision was taken in the Nvida Tigra 2, which is 
-a processor geared towards mobile systems. It integrates a dual
-core ARM Cortex A9 and GPU on a single chip using a single physical memory. 
+\paragraph{}The Cell Broadband Engine~\cite{kahle2005cell} illustrates the benefits obtainable with heterogeneous
+cores with distinct ISAs. The processor is optimised for gaming, and had as primary 
+requirements high performance for multimedia applications, and real-time
+responsiveness to the user and the network, hence a combination of 
+latency and throughput sensitive tasks. It had the additional goal 
+to be applicable to a wide range of platforms, and hence provide 
+both a programming model that is easy to adopt, and a sufficiently
+general architecture. It combines a dual issue general power architecture 
+compliant core (Power Processing Element), and 8 ``coprocessors''
+cores (Synergistic Processing Elements).  The PPE is a dual issue core with a 
+pipeline depth of 23. SPEs implement a new instruction set
+architecture optmised for power and performance. They add an extra layer
+to the memory hierarchy by each having some local memory, on which they storage instructions and data.  This is a technique
+which hopes to alleviate the memory bandwidth wall, especially significant in
+gaming applications. Both the PPE and the SPEs have
+additional support for SIMD (Single Instruction, Multiple Data) instructions, through
+which a large amount of data-level parallelism can be exploited, improving
+power efficiency. The PPE has control over the SPEs and decides of task allocations,
+ which processes to run, etc. Communication between cores is achieved 
+through direct memory access (DMA) and synchronisation
+mechanisms, via a high bandwidth bus (memory flow control). The processor itself is full 
+custom, once again to maximise performance per watt. 
 
-\paragraph{} The BigLittle processor struck a different tradeoff,
-and expressly chose to have cores of different capabilities, but
-with the same instruction set. The Arm LittleBig is a processor
+The co-existence of two types of cores thus allows the Cell engine to match
+the competing requirements of latency (by executing on the PPE),
+and throughput, by offloading multimedia code to the SPEs. 
+Programming on the Cell presents two challenges: firstly, the processor
+combines two different kinds of instruction sets. Secondly, the existence of 
+local store memory requires software to explicit manage it. 
+The choice of having two different instruction sets can be explained 
+by the desire to be able to run a standard OS one the main 
+core whilst uploading computationally intensive/highly parallel work 
+to the SPEs. Having a specialised architecture set optimised for multimedia
+ and power increased power efficiency, whilst having a Power PC compliant 
+architecture made it easier for developers to write programs on the Cell BE.  
+
+\paragraph{} The Big.LITTLE processor~\cite{greenhalgh2011biglittle} strikes 
+a different tradeoff, and expressly choses to have cores of different capabilities, but
+with the same instruction set. The ARM Big.LITTLE is a processor
 deisgned with the goal of improving power effiency in high
 performance mobile platforms, where there is a combination
-of computationally expensive, latency tasks such as gaming
-, while providing long battery for low processing intensity tasks such
-as texting. They make the observation that
-sequential parts of the application should be run
-on powerful cores whilst parallel parts, which can leverage data
+of computationally expensive, latency tasks such as gaming, 
+while providing long battery for low processing intensity tasks such
+as texting. Programmability is a major requirements as targeted developers
+are not expected to understand the details of computer architecture. 
+The develops of Big.LITTLE argue that sequential parts of the application 
+should be run on powerful cores whilst parallel parts, which can leverage data
 level parallelism or thread level parallelism, should be run
 on multiple small cores. The chip has two types of cores
-on it: the CortexA15 and the Coretex17. The Cortex7 is an in order dual issue
+: the CortexA15 and the CortexA17. The CortexA17 is an in-order dual issue
 processor with a short pipeline (8 to 10 stages). By contrast,  the CortexA15
  is an out-of-order triple issue superscalar processor
 which uses aggressive branch prediction and has a very deep pipeline
-(between 15 and 24 stages).  When approparite, the Cortex A15 trades off energy
-efficeicny for performance, while the Corte A7 trades off perfromance for energy efficiency.
-Each can operate at a number of different oeprating points. This allows the OS 
-to match the performance of the platform to the performance required by the application. 
-There is a single cache coherent interconnect,  which 
-facilitates full coherency between the two processors. 
+(between 15 and 24 stages). Both share an ISA. There is a single cache
+coherent interconnect, which facilitiates full coherency between the 
+two processors. Processes execute transparently on one core or the other.
+
+The key objective in Big.LITTLE is to precisely match the core capabilities to 
+performance requirements in order to optimise power efficiency. As such, the Cortex A15 trades off energy
+efficiency for performance, while the Corte A7 trades off performance for energy efficiency.
+Low intensity applications are executed on the Cortex A15, whilst performance critical applications
+are executed on the Cortex A17.  Each can operate at a number of different oeprating points,
+once again to match 
 This is important to note here, that it isn't the same tradeoff
 as the i7 and the Tilera cores made, where the decision was between
 a small number of powerful cores and a large number of simple cores. 
