@@ -236,15 +236,38 @@ This has implications both in terms of power consumption
 and performance. Higher clock frequency allows for more 
 instructions to be executed in a given period of time. This
 improves latency, but increases dynamic power consumption as illustrated
-in REF. Incorrect speculation also wastes bandwidth. CITE. 
+in~\ref{table:quantlaws}. Incorrect speculation also wastes bandwidth. CITE. 
 Significantly, even when these components are not being used, 
-static power consumption continues to increase, due to current leakage. 
-static power consumption 
-The relationship to performance is more complex. Complex cores
+static power consumption continues to increase, as it is proportional
+to static current, which grows linearly with the number of components
+on a chip. The relationship to performance is more complex. Complex cores
 focus mostly on exploiting ILP, with limited opportunities
 for exploiting Thread-Level-Parallelism and Data-Level-Parallelism
 other than through Intel Hyperthreading CITE or SIMD extensions CITE. 
-The diminishing returns observed by 
+The diminishing returns observed by ILP implies that large amounts
+of chip-area are being used with little performance gain. This is 
+the rational taken by certain designs to use a larger number
+of simpler cores. These cores have a lower switching frequency
+and few components. They therefore have a lower static/dynamic power
+footprint. Their smaller size implies that more core can be placed on 
+a single chip, or larger cache sizes can be built, a technique
+which has proven to be more efficient than complex speculative logic
+~\cite{borkar2011future}.  Many use Pollack's rule~\cite{borkar2011future}(Table ~\ref{table:quantlaws})
+to justify the choice of a large number of simple, low power cores: the 
+law states that doubling the number of transistors yields
+a 40\% performance increase, but at the cost of also doubling power consumption.
+A larger number of simpler cores additionally enables further power saving techniques,
+at a more fine grained level than with large complex cores. It gives processors the
+ ability to turn off cores (processor gating), or significantly lower the
+voltage at which they operate (dynamic voltage scaling) to match processor utilisation. 
+Trading off core complexity for  number of cores,
+the designs make one core assumption: that the workloads they process
+are sufficiently parallelisable and geared towards throughput rather than latency.
+Indeed, Ahmdahl's law states that speedup as the number of cores increase
+is bound by the sequential part of the application. If increasing the number of 
+cores comes at the price of decreasing clock frequency, than the sequential
+parts of the application will perform worse than before, penalising latency
+critical applciations. 
 
 \begin{table*}
 \begin{center}
@@ -254,7 +277,7 @@ The diminishing returns observed by
 Ahmdahl's Law CITE & $ Speedup \propto \frac{1}{(1 - P) + \frac{P}{N}} $\\ 
 $Power_{static}$ CITE & $P_{static} = Current_{static} \times Voltage$ \\
 $Power_{dynamic}$ CITE & $P_{dyn} = 1/2 \times Capacitive Load  \times Voltage^{2} \times Freq_{switched}$\\
-Pollacks's Law CITE & $ Speedup \propto \sqrt{Complexity}$ and  $Power_{increase} \propto Complexity$\\
+Pollacks's Law~\cite{borkar2011future}& $ Speedup \propto Complexity^{2}$ and  $Power_{increase} \propto Complexity$\\
 \end{tabular}
 \end{center}
 
@@ -267,24 +290,6 @@ domains, the need for power and cost efficiency suggests
 that there is going to be a large number of designs. 
 
 \begin{itemize}
-\item Powerful cores good for sequential execution but expensive
-in terms of power. Focus on ILP. Wasteful in terms of power. 
-Complex processors waste bandwdith due to 
-speculatie techniques greated towards increasing the throughput
-of each individual core. With less speculation, smaller cores can be more
-area, power and badnwdtih efficient. This effiecny allows
-a greater number of cores to be placed on chip and improves the overall
-throughput of the chil ,e ven as the throughput of each core is lower compared to a more 
-complex one. Pollack's rule: performance increase is roughly proportional to square root 
-of increase in complexity. Applying Pollack's rule, 
-performance of a msaller core reduces as square root of the size, but pwoer reduction is 
-Simpler cores consume significantly less power as
-a result of the combined effect of 1) less static power consumption because 
-of fewer components on the chip 2) the ability to scale voltage down as
-the clock rate is smaller.
-\item More simple cores better because of (give mathematical reasoning)
-\item Having multiple simple cores also allows you to better tailor
-performance, using processor gating, voltage scaling, sleep mode. 
 \item But not always: Ahdahmls' law, so bound by the sequential performance
 \item Has some implications that introduces non-uniformity in the machines. 
 \item Has some implications for the interconnect, now somehow needs to scale,
@@ -328,6 +333,10 @@ even in the cases where off chip bandwdith is scarce.
 Custom logic and other low power U cores could potentially be used to
 reduce sequential pwoer consumption or to efficiently 
 imrpove sequential processing performance. First, if the goal is to ahchieve the same level of performance as a baseline system with proecssesos, a U Core can be used to speed up parallel sections of an application while allowing the sequetnail proecssor o slow down with a signifant reduction in power. Antoher perilsyp ropsoed method allwos a pwoer hugnry sequetnial rpecssor to offlado sectiosn of serial code to custom logic. 
+Found that units hardwared to a paritcular data representatio 
+or comptuational algorithm
+can achieve 50 to 500 times grater enery efficency than a general 
+purpose register organsiation. 
 \item The second makes the point that not all applications
 are time critical, it is possible to run them on 
 less powerful hardware for example, this allows you to trade
@@ -359,7 +368,7 @@ to know what to schedule where, and when (if the workload changes).
 \paragraph{Relationship between cores } As the number of cores increases,
 and each core becomes more diverse, the question of the relationship
 between cores becomes more important. 
-\paragraph{Specialisation vs Generality} One of merging trends
+\paragraph{Specialisation vs Generality} One of emerging trends
 is that multicore architectures are increasingly being
 specialised for one specific purpose. As previously mentioned,
 large, there are competing metrics, all which must meet certain
@@ -382,6 +391,7 @@ servers, etc.), but also of components within each processor.
 Given such high specialisation for specific domains, the question that we need
 to ask, is how do we program for such devices, how can the software actually 
 reflect that specialisation. 
+Talk aout 10 x 10 rather than 90 x 10 
 
 \paragraph{}  These various axis highlight varying degrees of heterogeneity both within
 machines and across machines. Heterogeneity is a natural consequence of 
