@@ -227,6 +227,45 @@ We focus specifically on inter-machine and intra-machine heterogeneity as a mech
 to optimise power efficiency. 
 
 \paragraph{Core Performance and Number of Cores}
+
+Powerful and complex cores guarantee good sequential performance
+through aggressively exploiting instruction level parallelism,
+and high clock frequency. This requires complex hardware:
+deeper pipelines, multi-level branch prediction units, etc.
+This has implications both in terms of power consumption
+and performance. Higher clock frequency allows for more 
+instructions to be executed in a given period of time. This
+improves latency, but increases dynamic power consumption as illustrated
+in REF. Incorrect speculation also wastes bandwidth. CITE. 
+Significantly, even when these components are not being used, 
+static power consumption continues to increase, due to current leakage. 
+static power consumption 
+The relationship to performance is more complex. Complex cores
+focus mostly on exploiting ILP, with limited opportunities
+for exploiting Thread-Level-Parallelism and Data-Level-Parallelism
+other than through Intel Hyperthreading CITE or SIMD extensions CITE. 
+The diminishing returns observed by 
+
+\begin{table*}
+\begin{center}
+\label{table:quantlaws}
+\caption{Quantitative Laws of Computer Architecture}
+\begin{tabular}{|c|c|}
+Ahmdahl's Law CITE & $ Speedup \propto \frac{1}{(1 - P) + \frac{P}{N}} $\\ 
+$Power_{static}$ CITE & $P_{static} = Current_{static} \times Voltage$ \\
+$Power_{dynamic}$ CITE & $P_{dyn} = 1/2 \times Capacitive Load  \times Voltage^{2} \times Freq_{switched}$\\
+Pollacks's Law CITE & $ Speedup \propto \sqrt{Complexity}$ and  $Power_{increase} \propto Complexity$\\
+\end{tabular}
+\end{center}
+
+\end{table*}
+
+We see that the optimal number of cores and their respective 
+performance is heavily workload dependent. As processors
+are increasingly specialised towards specific application
+domains, the need for power and cost efficiency suggests
+that there is going to be a large number of designs. 
+
 \begin{itemize}
 \item Powerful cores good for sequential execution but expensive
 in terms of power. Focus on ILP. Wasteful in terms of power. 
