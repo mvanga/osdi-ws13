@@ -2,7 +2,7 @@
 \section{Multicore Architectures}
 \paragraph{}  This section surveys the major architectural decisions of modern multicore 
 architectures. The high heterogeneity that multicore architectures exhibit
-reflects the dual objectives of improving power effiency ~\cite{borkar2011futuremicroprocessors}:
+reflects the dual objectives of improving power effiency ~\cite{borkar2011future}:
 optimising performance within a given power budget on the one hand, 
 and reducing power consumption whilst maintaining performance on the other .
 
@@ -30,51 +30,49 @@ reasoning behind each design decision, focusing on specific examples.
 
 
 \paragraph{Small number of complex high performance cores}
-Various architectures place a small number (2-8) of highly
-powerful cores on a chip.  Cores are mostly homogeneous, fully cache-coherent,
-and generally own a private cache, but share the last level cache. 
+These are power-hungry processors which optimise sequential execution
+and limited amounts of thread level parallelism. These architectures 
+consist of a small number (2-8) of highly powerful cores on a 
+chip. Cores are mostly homogeneous, fully cache-coherent, with a private cache 
+and shared last level cache. 
 Each core aggressively exploits instruction level parallelism, through
-out-of-order execution, speculation, very deep pipelines, etc. 
-These designs first and foremost optimise sequential performance, 
-and leverage instruction level parallelism over thread level parallelism. 
-This comes at the expense of high power consumption, 
+out-of-order execution, speculation, very deep pipelines, etc. optimising
+single threaded performance. This comes at the expense of high power consumption, 
 (although most designs incorporate some power
 saving techniques)~\cite{Vajda:1414193,Borkar:2007:TCC:1278480.1278667}
-\paragraph{} The i7 Intel Core 920~\cite{rotem2012pai} contains 4 cores which aggresively exploit ILP through a four issue, dynamically scheduled 16 stage pipeline, and multilevel branch prediction unit. All cores own
+The i7 Intel Core 920~\cite{rotem2012pai} contains 4 cores which aggresively exploit ILP through a four issue, dynamically scheduled 16 stage pipeline, and multilevel branch prediction unit. All cores own
  private L1 and L2 caches, and share the L3 cache. They communicate
 through a ring based interconnect. These architectures are
 optimised for desktop computing. Applications have very diverse performance requirements. Cores are highly general to guarantee good performance for all workloads. Optimising for latency requires these cores to be very powerful  and aggressively exploit ILP to guarantee good per thread performance. Applications are mostly designed with uni-processors in mind, by programmers with little knowledge of the underlying hardware. Many applications continue to be mostly sequential. As performance is bound by the sequential parts of an application, 
-complex cores are required to guarantee good performance. 
+complex cores are required to guarantee good performance.
 Adding more cores simply allows for new optimisations to be explored, namely, 
-thread level parallelism, over the diminishing returns obtained by trying
-to further exploit ILP.  Secondly, programmers often expect the 
-sequential that they used on uniprocessors to be preserved. 
-As a result, processors like the i7 put a lot of effort in exposing
-a simple programming model, and hiding much of the underlying complexity, through
-uniform cores, strong memory coherency, etc. 
-The i7 distinguishes itself by its Turbo Boost technique (TODO: finish)
+thread level parallelism, over the diminishing returns of further exploiting ILP.
+Processors like the i7 additionally try to mask the complexity of the underlying 
+multicore architecture. They achieve this by using homogeneous cores, guaranteeing
+strong memory coherency. This enables developers to continue writing
+the same applications that they previously wrote for uniprocessors.
 
 
 \paragraph{Large Number of Simple, Low Frequency Cores} An alternative
 design strategy consists in placing a larger number of simpler, lower frequency cores
-onto the chip. For the majority of architectures that follow these patterns, 
-cores are homogeneous and are fully memory coherent. These architectures are
+onto the chip. These designs optimise both throughput and power at the expense of latency.
+Cores are  usually homogeneous and fully memory coherent~\cite{Vajda:1414193}. These architectures are
 geared towards server workloads, that is, applications which  are mostly highly 
 parallelisable, and throughput sensitive. They additionally require the ability
-to scale whilst keeping power consumption low.   The design decisions therefore
- optimise throughput whilst minimising power consumption. 
-They do so by exploiting a new kind of parallelism, thread-
+to scale whilst keeping power consumption low.  They do so by exploiting a new kind of parallelism, thread-
 level-parallelism (TLP). This allows for different parallel parts of the application
-to be executed simultaneously on different cores. The looser latency 
-requirements reduces the need for the - likely short - sequential
-parts of the application to finish quickly. This in turn signifies that
-there is no need to aggressively exploit ILP. Individual cores can thus be 
-simpler, and run at a lower frequency. This reduces the static and dynamic
-power consumption of each core, and allows cores to occupy a smaller
-area, thus allowing to place more cores on a chip, which further increases throughput. 
+to be executed simultaneously on different cores~\cite{Borkar:2007:TCC:1278480.1278667}. This improvement in 
+throughput is achieved at the
+expense of latency. Individual cores are simpler as they do not try to aggressively
+exploit ILP and run at a lower frequency. Though this implies that the
+sequential parts of an application will run more slowly, this design
+strategy significantly  reduces the static and dynamic
+power consumption of each core and allows cores to occupy a smaller
+area, thus allowing to place more cores on a chip, which further increases throughput
+~\cite{Borkar:2007:TCC:1278480.1278667,4563876}. 
 
 
-\paragraph{} The Tilera architecture thus integrates a large number of low power, 
+\paragraph{} The Tilera architecture  integrates a large number of such low power, 
 low frequency cores ~\cite{wentzlaff2007tile}. The TilePro64 processor contains 
 64 cores, each operating at a frequency of 866 Mhz. This contrasts heavily
 with the 4 cores of the i7, which each operated at a frequency of 2.66 Ghz (2.93 with
@@ -82,24 +80,19 @@ Turbo Boost)  Each tile is a compile-time scheduled triple-issue VLIW processor 
 a pipeline depth of only 5. Scheduling VLIW operations at compile time is 
 significantly more power efficient
 than relying on dynamic scheduling like most superscalar processors do (due to
-static branch prediction and lack of out-of-order execution). Similarly,
+static branch prediction and lack of out-of-oder execution)~\cite{hennessy2006comparchquantitative}. Similarly,
 reducing the pipeline depth to 5 (as opposed to 19 like the i7) reduces
 power consumption. 
 It is however more restrictive in the ILP that it can exploit. Cores are homogeneous and share 
-an instruction set. This design decision was taken specifically to make it 
-easier for applications to run on this architecture~\cite{wentzlaff2007tile}. Each
-tile has a private cache. All share a fully coherent dynamic
-distributed L3 cache.  Cache coherence is maintained
-through each core having a home core, responsible for tracking
-which cores share the cacheline. This directory based approach is significantly
-more scalable than the traditional bus snooping technique.  The interconnect is a point to point mesh network, which
+an instruction set in order to make it easy for developers to write applications,
+and increase adoption~\cite{wentzlaff2007tile}. The interconnect is a point to point mesh network, which
 is highly scalable and minimises wire delays between cores. This
-contrasts with the traditional ring based architecture, adopted for example
-in the i7,  which, partly due to memory coherency protocols, quickly becomes a bottleneck
-as the number of cores grows. This design allows for good performance
+contrasts with the traditional ring based architecture adopted in the i7,  
+which, partly due to memory coherency protocols, becomes a bottleneck
+as the number of cores grows~\cite{1431574}. This design allows for good performance
 if the workload is highly parallelisable, but most
-importantly, it provides the ability to scale whilst satisfying a low power budget. 
-A Facebook study found that a task-parallel workload running on the TilePro64 exhibited
+importantly, it provides the ability to scale whilst satisfying a low power budget: 
+a Facebook study, for example, found that a task-parallel workload running on the TilePro64 exhibited
 67\% higher throughput, whilst using 3 times less power than the corresponding
 execution on an x86 based processor~\cite{berezecki2011manycore}. 
 
@@ -111,12 +104,8 @@ was key to facilitate application development by users. The last category
 of multicore processors, by contrast, explicitly optimises both
 power and performance, at the expense of programmibility. They do so in two ways: 
 by associating cores with different capabilities on a chip, and possibly components
-with different ISAs. This allows them to run tasks on the core
-that is best suited for that workload: a mostly sequential taks will be run 
-on a highly powerful core, whilst an easliy parraleisable workload
-will be run on multiple simple cores. Similarly, certain chips incorporate
-application-specific devices, such as GPUs or FPGAs which can achieve extremely
-high performance in specific cases. Appropriately scheduling each 
+with different ISAs~\cite{kumar:2004:SHM:998680.1006707,5695539,Kumar:2005:HCM:1100859.1100890,5695539}. This allows them to run tasks on the core
+that is best suited for that workload. Appropriately scheduling each 
 task on the appropriate core complicates the task of the OS scheduler.
 Programming for multiple ISAs increases the complexity of a developer's code. 
 
