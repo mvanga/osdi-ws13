@@ -2,37 +2,31 @@
 \section{Multicore Architectures}
 \paragraph{}  This section surveys the major architectural decisions of modern multicore 
 architectures. The high heterogeneity that multicore architectures exhibit
-reflects the dual objectives of improving power effiency:
+reflects the dual objectives of improving power effiency ~\cite{borkar2011futuremicroprocessors}:
 optimising performance within a given power budget on the one hand, 
-and reducing power consumption whilst maintaining performance on the other.
+and reducing power consumption whilst maintaining performance on the other .
 
 
 
-\paragraph{} \emph{Inter-machine heterogeneity} can be explained by the
-increased specialisation of  architectures for specific usecases. Chips for
-mobile devices optimise for performance, reactivity, and power.
-Processors for desktop optimise for cost-performance and graphics.
+\paragraph{} \emph{Inter-machine heterogeneity} arises through the
+increased specialisation of architectures for specific usecases. Chips for
+mobile devices optimise for performance, reactivity, and power~\cite{hennessy2006comparchquantitative}.
+Processors for desktop optimise for cost-performance and graphics~\cite{hennessy2006comparchquantitative}
 By contrast, servers prioritise throughput, scalability and energy,
 whilst embedded devices optimise for energy and application-specific
-performance. \emph {Intra-machine heterogeneity} can 
-similarly be explained by the desire to optimise performance for power, or power
-for performance. Each individual core is increasingly specialised
+performance~\cite{hennessy2006comparchquantitative}. \emph {Intra-machine heterogeneity}  similarly arises as a result of optimising power efficiency over 
+performance only. Each individual core is increasingly customised
 for a specific workload type. Different specialised cores then coexist within
-a processor to support a wide range of applications. 
+a processor to support a wide range of applications~\cite{5695539,balakrishnan2005impactperfasym}. 
 
 \paragraph{} We compare and contrast the motivation behind these
 design decisions and their impact on the competing
 concerns of power, performance, programmability.
 
-
 \subsection{Architecture Overview}
 
-
-Modern architectures cluster around three main categories:
-1) designs with a small number of powerful cores 2) processors with large number of
-simple, homogeneous cores 3) architectures which explicitly associate
-cores of varying capabilities and instructions sets. We identify the
-reasoning behind each design decision, focusing on a specific examlpe. 
+\paragraph{} Modern architectures cluster around three main categories~\cite{Vajda:1414193}: 1) designs with a small number of powerful cores 2) processors with large number of simple, homogeneous cores 3) architectures which explicitly associate cores of varying capabilities and instructions sets. We identify the
+reasoning behind each design decision, focusing on specific examples.
 
 
 \paragraph{Small number of complex high performance cores}
@@ -45,26 +39,11 @@ These designs first and foremost optimise sequential performance,
 and leverage instruction level parallelism over thread level parallelism. 
 This comes at the expense of high power consumption, 
 (although most designs incorporate some power
-saving techniques)
-\paragraph{} The i7 Intel Core 920 contains 4 cores which aggresively
-exploit ILP through a four issue,  dynamically scheduled 16 stage pipeline,
-and multilevel branch prediction unit. All cores own
+saving techniques)~\cite{Vajda:1414193,Borkar:2007:TCC:1278480.1278667}
+\paragraph{} The i7 Intel Core 920~\cite{rotem2012pai} contains 4 cores which aggresively exploit ILP through a four issue, dynamically scheduled 16 stage pipeline, and multilevel branch prediction unit. All cores own
  private L1 and L2 caches, and share the L3 cache. They communicate
 through a ring based interconnect. These architectures are
-optimised for desktop computing, which has three distinguishing features:
-applications are mostly designed with uni-processor in mind and are 
-mostly latency sensitive. Secondly, these applications are built by 
-programmers which do not necessary have in depth knowledge about computer
- architecture or operating systems. And finally, the performance requirements
-of applications vary significantly, ranging from web-browsing
-to graphics rendering.  This diversity requires cores to be very general,
-so that they can adapt to the various kinds of workloads desktop computers
-must support. Optimising for latency requires these cores to be very powerful 
-and aggressively exploit ILP to guarantee good per
-thread performance. The lack of knowledge about the underlying architecture
-means that many developers continue to design applications with uniprocessors
-in mind. This has two consequences, many applications have large sequential parts and 
-little ILP. As performance is bound by the sequential parts of an application, 
+optimised for desktop computing. Applications have very diverse performance requirements. Cores are highly general to guarantee good performance for all workloads. Optimising for latency requires these cores to be very powerful  and aggressively exploit ILP to guarantee good per thread performance. Applications are mostly designed with uni-processors in mind, by programmers with little knowledge of the underlying hardware. Many applications continue to be mostly sequential. As performance is bound by the sequential parts of an application, 
 complex cores are required to guarantee good performance. 
 Adding more cores simply allows for new optimisations to be explored, namely, 
 thread level parallelism, over the diminishing returns obtained by trying
@@ -315,7 +294,7 @@ Unconvential cores improve power efficiency through heavy customisation of compu
 leverage this insight to design chips which contain cores of differing 
 capabilities. The literature refers to these as performance asymmetric multicores. This allows the processor to better match execution resources to each 
 application's need and address a much wider range of competing workloads, 
-with increased power efficiency. X et al. found that using asymmetric core could improve energy per instruction by four to six times. Workloads which are mostly executed sequentially can be executed on a complex core, whilst parallel workloads can be executed on multiple simple cores. This addresses the issue we previously highlighted with homogeneous simple cores (Ahmdahl's law); that performance is bound by the sequential portion of the application, which suffers if executed on less powerful cores. Asymmetric Multicore Chips can guarantee that sequential performance remains high whilst power consumption can be reduced for highly parallel applications. Similarly, applications vary in their performanc requirements. Examples include workloads which are not latency or throughput sensitive, and can therefore execute on less powerful cores, trading off performance for power, so long as the performance is ``good enough''. Other examples include the FAWN key-value store, which runs on a series of wimpy nodes (nodes powered b a low power CPU)~\cite{andersen2009fawn}. This is however not appropriate for every workload ~\cite{lang2010nonwimpy}.
+with increased power efficiency. X et al. found that using asymmetric core could improve energy per instruction by four to six times. Workloads which are mostly executed sequentially can be executed on a complex core, whilst parallel workloads can be executed on multiple simple cores. This core asymmetry addresses the effects of Ahmdahl's law: that performance is bound by the sequential portion of the application, which suffers if executed on less powerful cores. Asymmetric Multicore Chips can guarantee that sequential performance remains high whilst power consumption can be reduced for highly parallel applications. Similarly, applications vary in their performanc requirements. Examples include workloads which are not latency or throughput sensitive, and can therefore execute on less powerful cores, trading off performance for power, so long as the performance is ``good enough''. Other examples include the FAWN key-value store, which runs on a series of wimpy nodes (nodes powered b a low power CPU)~\cite{andersen2009fawn}. This is however not appropriate for every workload ~\cite{lang2010nonwimpy}.
 Asymmetric multicore chips offers the possibility of large improvements power efficiency, but at the cost of a significant burden on the OS and applications,
 as discussed in the following section. 
 
