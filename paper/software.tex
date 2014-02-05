@@ -8,13 +8,13 @@ better programs? where should heterogeneity be handled? And finally,
 are applications required to make similar tradeoffs between
 performance, power, and programmability as the hardware?
 In this section, we answer these questions with a focus on the
-challenges faced by operating systems running.
+challenges faced by the lowest layer of software: the operating system.
 
-Operating systems in general have a complex task; to manage the available
+Operating systems have a complex task; to manage the available
 resources of a computer efficiently and securely while providing abstractions
-that are powerful enough for system developers and yet intuitive. The
+that are powerful enough for system developers and yet intuitive to use. The
 introduction of a large number of processing cores adds a whole new set of
-challenges to an already complex problem. This complexity is further complicated
+challenges to this already complex problem. This is further complicated
 by the presence of heterogeneity in the hardware. In particular the following
 are some of the challenges that operating system designers for modern heterogenous
 architectures face.
@@ -24,80 +24,54 @@ architectures face.
 additionally need to be designed with modularity in mind in order to support a range
 of ISA's and processor frequencies within the same machine.
 \item \textbf{Space-sharing over time-sharing.} The presence of a large number of cores in the system requires a new resource allocation model and has led to the development
-of new design patterns for operating systems. In particular, the concept of space-sharing over time-sharing in an operating system is a concept we will explore in further
-detail.
+of new design patterns for operating systems. In particular, the concept of space-sharing over time-sharing in an operating system is a concept we will explore in further detail.
 \item \textbf{Increased resource allocation complexity.} The presence of heterogeneity introduces significant complexity into the resource
 management problem because resources now have a range of performance characteristics
-that the operating system needs to considered when executing a task. For example, memory
-access latencies may need to be kept down for certain applications while others may need
-faster latencies to peripheral controllers.
-\item \textbf{Memory bandwidth as the primary bottleneck.} A related issue is that memory efficiency is a new goal for operating systems as
-we are reaching the memory bandwidth limits for the current versions of memory
-technology. While there are new approaches that are being researched, none of them have
-reached mass-market scales yet. This means that operating systems need to optimize for
-memory bandwidth in order to ensure good long term performance. Research kernels
-typically tend to choose a point in the range between a no-sharing policy for memory
-between cores and a policy that shares memory among islands of cores of reasonable size
-in order to ensure good performance.
-\item \textbf{Power-aware operating system design.} As the number of cores grows, power consumption is a major concern from a
-practical perspective. It is vital for power consumption to be kept low as it determines
-the operating costs for data centers and servers running new heterogenous hardware.
-Power awareness is increasingly becoming a major responsibility for modern operating
-systems. In particular, due to the large number of cores on some of these architectures,
-dynamic power management, where cores are suspended and woken up at runtime is an
-inescapable requirement.
+that the operating system needs to considered when executing a task. For example, memory access latencies may need to be kept down for certain applications while others may need faster latencies to peripheral controllers.
+\item \textbf{Memory bandwidth as the primary bottleneck.} A related issue is that memory efficiency is a new goal for operating systems as, due to the large number of cores and complex interconnects, interconnect bandwidth limits become a bottleneck. This means that operating systems need to optimize for memory bandwidth in order to ensure good long term performance of applications.
+\item \textbf{Power-aware operating system design.} As the number of cores grows, power consumption is a major concern from a practical perspective. It is vital for power consumption to be kept low as it determines the operating costs for data centers and servers running new heterogenous hardware. In particular, due to the large number of cores on some of these architectures, dynamic power management, where cores are suspended and woken up at runtime is an inescapable requirement.
 \end{itemize}
 
 \subsection{Modular Operating System Designs}
+
 Due to the possibility of multiple instruction set architectures being present within a
-single machine, each running at a range of different frequencies, requires building
-operating systems differently. In particular, in order to make it easy for system
-programmers to make efficient use of the resources being abstracted, most research
-kernels tend to adopt a minimal microkernel-inspired design.
+single machine, each running at a range of different frequencies, a modular approach to building operating systems is required. The most prominent research in this area, which has spawned a multitude of subsequent research, is the idea of a multikernel \cite{Barrelfish} where each core runs a separate kernel and talks with other cores using message passing. Most research kernels in this regard have adopted a minimal microkernel-inspired design.
 
-While microkernels themselves are not a new concept, it is an almost ubiquitous design
-decision in most multi-core research kernels today (\eg, Barrelfish, Helio, fOS). Essentially, the job of the microkernel is to provide a uniform set of abstractions for programmers to work with without having to deal with the underlying variations of the hardware.
+While microkernels themselves are not a new concept  \cite{Liedtke, Mach, Amoeba}, it is an almost ubiquitous design decision in multi-core research kernels today (\eg, Barrelfish \cite{Barrelfish}, HeliOS \cite{HeliOS}, fOS \cite{fOS}). Essentially, the job of the microkernel is to provide a minimal set of abstractions for programmers to work with, without having to deal with the underlying variations of the hardware.
 
-The features that comprise these microkernels typically vary among projects. For example, Barrelfish uses an L4-style microkernel on each core in the system (or islands of cores) while HeliOS uses even smaller library operating systems on each core (with specialized cores handling the resource management aspects).
+The features that comprise these microkernels typically vary among projects. For example, Barrelfish uses an L4-style microkernel on each core in the system (or islands of cores) while HeliOS uses even smaller \emph{library operating systems} (libOS) on each core, with specialized cores handling the resource management aspects.
 
 \subsection{Space Sharing over Time Sharing}
 
-With the rise in the number of cores, the concept of space-sharing has become a somewhat logical operating system design. The idea is to look at processing cores as
-just another resource that is available in the system, similar to virtualization, and provide a subset of them for each application to use.
+With the rise in the number of cores, the concept of space-sharing \cite{Space-Sharing} has become a somewhat logical operating system design. The idea is to look at processing cores as just another resource that is available in the system and provide a subset of them for each application to use.
 
-The result of this is that applications can manage the scheduling of their threads on
-cores using an application-specific policy. Addtionally, such a scheme allow the cores
-to be isolated in order to support high-criticality workloads which may require that
-they have no interference from lower-criticality work.
+Such an architecture allows applications to manage the scheduling of their threads on
+cores using an application-specific policy. Addtionally, such a scheme can be used to allow applications to be temporally isolated. For examepl, prevent low-criticality workloads from interfering with high-criticality workloads.
 
-The role of the operating system in such cases is simply to provide a thin unobstrusive
-protection layer that does not get in the way of the applications. The actual resource
-allocation can be done in specialized cores reserved where the operating system runs
-and to which applications can direct requests.
+In space-sharing systems, the role of the operating system is reduced to providing a thin, unobstrusive protection layer that does not get in the way of the applications. The actual resource allocation can be done in specialized cores reserved where the operating system runs and to which applications can direct requests.
 
-Most multicore research operating systems (\eg Corey, Tesselation, fOS, Barrelfish)
-employ this technique to a certain degree. Some like Barrelfish support the creation
-of larger islands of cores that run a single instance of the kernel but the arching
-abstraction of space-sharing remains the same.
+Most multicore research operating systems (\eg Corey \cite{Corey}, Tesselation \cite{Tesselation}, fOS, Barrelfish) employ this technique to a certain degree. While kernels like Barrelfish allow the creation of larger islands of cores that run a single instance of the kernel but the arching abstraction of space-sharing remains the same.
 
-There are certain disadvantages to such an approach. It may be possible for applications to ``waste'' their processors by idling them due to overprovisioning. In such scenarios the libOS running on individual cores could possibly coordinate with the OS cores to let them know of such events, allowing them to be allocated to other tasks or as we discuss later, powered down to conserve power.
+There seem to be certain disadvantages to such an approach. It may be possible for applications to ``waste'' their processors by idling them due to overprovisioning. In such scenarios the libOS running on individual cores might need to coordinate with the OS cores to let them know of such events, allowing them to be allocated to other tasks or as we discuss later, powered down to conserve power.
 
-In general, we feel that the space-sharing design are easy to reason about and are relatively simple to implement as the underlying kernel is a minimal libOS. These two reasons alone make this a strong abstraction for future OS designs and it is evident based on recent multicore research kernels that it is a widely agreed-upon idea.
+In general, we feel that the space-sharing design are easy to reason about and are relatively simple to implement (as the underlying kernel is minimal). These two reasons alone make this a strong abstraction for future OS designs and it is evidenced by the slew of recent multicore research kernels which adopt this concept.
 
 \subsection{Higher Resource Allocation Complexity}
 
-The scheduling and resource allocation problem has a huge increase in complexity when it comes to heterogenous multicores. In fact, it may be intractable or impossible in many configuration to simultaneously achieve all the constraints required by applications, in which case tradeoffs need to be made that deteriorate performance. Which processes to penalize in such scenarios is another problem as well. For example should the lowest-priority workloads bear the brunt or should it be low-criticality workloads (which may still have higher priority)?
+The scheduling and resource allocation problem is significantly more complicated on heterogenous multicore architectures. It may even be intractable or impossible for certain configuration to satisfy all the constraints required by applications, in which case tradeoffs need to be made that deteriorate performance.
 
-Below we present three scenarios that illustrate this complexity. In the first two examples, we take an example that illustrates the type of decisions that need to be made due to the heterogeneity of computing resources and what mechanisms need to be supported by the operating system to achieve this. In particular, we consider scenarios with differing goals; lowering power consumption and increasing performance.
+%Which processes to penalize in such scenarios is another problem as well. For example should the lowest-priority workloads bear the brunt or should it be low-criticality workloads (which may still have higher priority)?
+
+Below we present three scenarios that illustrate this complexity. In the first two examples, we take an example that illustrates the type of decisions that need to be made due to the heterogeneity of computing resources and what mechanisms need to be supported by the operating system to achieve this. In particular, we consider scenarios with the joint goals of lowering power consumption and increasing performance.
 
 \subsubsection{Processors with same ISA but differing speeds.}
 We consider an example where a parallel application must be run on a platform consisting of a set of processor, each with the same ISA but different frequencies at which they execute. Suppose the primary goal is to improve the performance per watt of power.
 
-To achieve this goal in such a scenario, it might be better for the operating system to execute the parallel parts of the application on a large set of low-power, low-frequency cores. As soon as a sequential section begins, it can be sped up by migrating the application dynamically to a more powerful core. Since the ISA is the same, this can be done at runtime.
+In such a scenario, it might be better for the operating system to execute the parallel parts of the application on a large set of low-power, low-frequency cores. As soon as a sequential section begins, it can be sped up by migrating the application dynamically to a more powerful core and moving it back once the sequential section has completed. Since the ISA is the same, this can be done at runtime without adding any overhead for programmers.
 
-This also brings up significant challenges regarding how this information should be conveyed to the OS. One technique to do this is the do runtime profiling to determine linearized sections of the code and move the processes around different processors accordingly at runtime.
+This also brings up significant challenges regarding how this information about should be conveyed to the OS. One technique to do this is the to insert hooks during lock acquisitions and releases to determine linearized sections of the code and move the processes around different processors accordingly at runtime.
 
-The other appoach is to have this information as part of the application binary, either automatically generated by compilers, or explicitly tagged by system developers themselves. The second approach brings up an interesting challenge: how can one design a secure scheme for passing this information from processes to the kernel?
+The other appoach is to have this information as part of the application binary, either automatically generated by compilers, or explicitly tagged by system developers themselves. This also allows for more flexibility (\eg prevent migrations during certain critical sections) at the cost of programmability. The second approach also brings up an interesting challenge: how can we design a secure scheme for passing this information from processes to the kernel?
 
 % IDEA: how can we ensure security if application binaries embed information?
 % IDEA: capability-based system that extends resources with attribute classes?
@@ -107,7 +81,7 @@ Consider another example where the ISA's of various processors in the system dif
 
 In such a scenario, better performance would be achieved by migrating the process over to the specialized computing unit (GPU or ASIC) right before the performance-sensitive code starts executing and moving it back once it has completed (to prevent unnecessary power consumption and to allows other processes to use the (\emph{probably scarce}) specialized resource).
 
-Again, establishing such a scheme can be done in two ways: automatically or manually. \todo{It is unclear whether automatic detection of specialized code is currently being used}. There have been, however, several research projects looking at the manual approach. An example of this is Dandelion, a compiler and runtime for heterogenous systems that generates optimized code for different parts of a program based on the different processors available on the system.
+Again, establishing such a scheme can be done in two ways: automatically or manually. \todo{It is unclear whether automatic detection of specialized code is currently being used}. There have been, however, several research projects looking at the manual approach. An example of this is Dandelion \cite{Dandelion}, a compiler and runtime for heterogenous systems that generates optimized code for different parts of a program based on the different processors available on the system.
 
 By generating this information at the code-generation level (\ie during compilation of the application), Dandelion provides significant benefits towards transparent programmability of the entire system. This is in contrast with approaches where manual tagging of code was needed.
 
@@ -117,13 +91,14 @@ Apart from the application level, the operating system itself must provide a uni
 
 However, additional complexity arises when certain applications cannot execute on some processors or prefer to execute on others (\ie an ISA affinity). This can lead to difficult scheduling problems for the operating system and it is unclear how this will be managed in the future.
 
+\subsubsection{Memory Heterogeneity and Bandwidth}
+While the subject of memory heterogeneity has not been touched too much in this paper, we bring it up here as it adds an interesting dimension of complexity to the scheduling problem.
 
-\subsubsection{Memory Heterogeneity}
-With the vast range of access times possible, a ``follow the data'' pattern has been proposed where an OS migrates processes to the core closest to the part of memory holding the data needed.
+Based on which core a process executes on, memory accesses can havea a vast range of access times possible depending on which part of memory is being accessed. An interesting way to improve the performance in such scenarios is a ``follow the data'' pattern \cite{Follow-Pattern}, where an OS migrates applications to the core closest to the part of memory they are currently accessing.
 
-Due to the complex cache architectures, mixed with the large number of cores that may be accessing data, most operating system designs in this area (cite) tend to either not share memory at all (partitioned at boot time) or provide some way to isolate pieces of memory and give them off to processes.
+In general, with regard to memory heterogeneity, due to the complex cache architectures that may be cache coherent, mixed with the large number of cores that may be accessing data, most of the research operating system designs for heterogenous architectures mentioned earlier tend to either not share memory at all (which is partitioned and assigned to each core at boot time) or have islands of coherence where a small cluster of processors have cache-coherent shared memory. Note that applications may still share memory across cores on kernels such as Barrelfish, however, through the use of a capability-based access control mechanism, this shared access is explicit and decided by the application itself.
 
-Discussion: scheduling and decision making in the kernel just got a huge increase in complexity. In fact, it may be intractable in many situations to actually achieve all these goals simultaneously in which case, tradeoffs need to be made with regard to performance at the cost of increased utilization of system resources. Memory sharing islands may be useful but certainly it seems like no one is considering sharing all memroy between all cores in many-core chips. Kernel structure however has grown towards small minimalist microkernel designs.
+The major concern that operating systems must deal with in these architectures are to ensure that the bandwidth limits on the memory interconnect do not prevent the degradation of the performance of applications. Research kernels typically tend to allow a point somewhere in the range between a no-sharing policy for memory between cores and a policy that shares memory among islands of cores of reasonable size in order to ensure good performance. While the sharing of all memory by all cores is supported, it is certainly not recommended in kernels like Barrelfish. Again, from an OS perspective, the follow-the-data pattern works well to reduce memory bandwidth usage as the number of intermediate links are reduced, preventing congestion on those.
 
 \subsubsection{Discussion}
 
@@ -135,8 +110,9 @@ Due to the large variations in performance on heterogenous hardware, it is diffi
 
 A possible area of research might be how to actually specify requirements of an application and how to actually satisfy these. Barrelfish, for example, embeds a Prolog interpreter that generates a set of facts about the system at boot time and allows the kernel to query this database using information from requests by applications. While this may seem like overkill, it points to the fact that it is extremely difficult to grasp the intricacies of modern computer architectures and design general algorithms that perform well across the large combinations possible.
 
-\subsection{Memory Bandwidth}
-
 \subsection{Power Awareness}
-With power fast becoming one of the primary bottlenecks of exploiting large-scale multiprocessors, the OS needs to manage resources much more carefully. For example, shut down cores, coalesce tasks onto as few cores as possible. These come at the cost of performance sometimes but it is one that needs to be made now. However, this is not so simple. For example for highly parallel applications, more power is saved by running them on more cores at lower frequencies rather than coalescing them onto fewer cores.
-We do not have specific kernels that try to focus on optimizing power but it seems to be at the back of the mind for each kernel design in some way.
+While power-awareness is almost a primary goal in computer architecture research, we found surprisingly little mention of it in OS literature. Thus, in the following paragraphs we simply discuss why we think this may be the case and what might be interesting avenues for future work.
+
+The first reason that we see for the lack of power-aware research in systems literature is that it has simply not become a primary issue when designing software. In particular, it is not yet critical to have low power consumption at the cost of increased system complexity and reduced performance. While mobile phones are a prime example of where such research is directly applicable, it seems like the bulk of research done in the hardware community has led to the processors in mobile phones that are ``good enough'' with some basic power management features.
+
+The second, more technical reason we posit is that power-aware decision-making at the software level is hard to reason about. In particular, the non-linearity of power with respect to performance make it very difficult to understand what an optimal placement topology or scheduling decision might be. For example for a CPU bound workload it may be more power-conserving to shut down cores as many cores as possible and coalesce processes onto a few cores. However, for highly parallel applications, more power may be saved by running them on more cores at lower frequencies rather than coalescing them onto fewer cores. Unless these tradeoffs become easy to reason about, it seems unlikely that we will see strong research in this area (sans the research needed to establish these tradeoffs).
