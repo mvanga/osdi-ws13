@@ -1,4 +1,4 @@
-
+]
 \section{Multicore Architectures}
 \paragraph{}  This section surveys the major architectural decisions of modern multicore 
 architectures. The high heterogeneity that multicore architectures exhibit
@@ -256,17 +256,17 @@ which has proven to be more efficient than complex speculative logic
 to justify the choice of a large number of simple, low power cores: the 
 law states that doubling the number of transistors yields
 a 40\% performance increase, but at the cost of also doubling power consumption.
-A larger number of simpler cores additionally enables further power saving techniques,
-at a more fine grained level than with large complex cores. It gives processors the
- ability to turn off cores (processor gating), or significantly lower the
-voltage at which they operate (dynamic voltage scaling) to match processor utilisation. 
-Trading off core complexity for  number of cores,
-the designs make one core assumption: that the workloads they process
+A larger number of simpler cores additionally enables further power saving techniques, as the larger number of smaller cores implies that overall power consumption can be controlled at a more fine grained level. 
+Each processor can be turned on or off (processor gating), and run at its own
+optimised supply voltage and frequency to match processor utilisation CITE. 
+
+Computer architectures which make this tradeoff rely on core assumption: that the workloads they process
 are sufficiently parallelisable and geared towards throughput rather than latency.
 Indeed, Ahmdahl's law states that speedup as the number of cores increase
-is bound by the sequential part of the application. If increasing the number of 
-cores comes at the price of decreasing clock frequency, than the sequential
-parts of the application will perform worse than before, penalising latency
+is bound by the sequential part of the application. If the application 
+is mostly sequential, the speedup will be small. As increasing the number of 
+cores comes at the price of decreasing clock frequency, the sequential
+parts of the application will perform worse than when using complex cores, penalising latency
 critical applciations. 
 
 \begin{table*}
@@ -283,120 +283,75 @@ Pollacks's Law~\cite{borkar2011future}& $ Speedup \propto Complexity^{2}$ and  $
 
 \end{table*}
 
-We see that the optimal number of cores and their respective 
-performance is heavily workload dependent. As processors
-are increasingly specialised towards specific application
-domains, the need for power and cost efficiency suggests
-that there is going to be a large number of designs. 
+The optimal number of cores and their respective 
+performance is heavily workload dependent. As processors 
+are increasingly becoming specialised for specific workloads,
+they are likely to strike different points in that spectrum, 
+increasing inter-machine heterogeneity. Similarly,
+developers have to adapt applications to match 
+the degree of parallelism required to guarantee good performance
+with low power. The rise of inter-machine heterogeneity
+due to power constraints introduces significant interdependence
+between architectures and applications. 
 
-\begin{itemize}
-\item But not always: Ahdahmls' law, so bound by the sequential performance
-\item Has some implications that introduces non-uniformity in the machines. 
-\item Has some implications for the interconnect, now somehow needs to scale,
-same for memory, currently become a bottleneck
-\item Also has the issue that puts the onus on the programmer to manage 
-resources appropriately, and adapt to multicore. Has shown in 
-the Analysis paper, not necessarity the case. Similaryl, 
-also need to adapt programming model, so in seeking to maximise 
-performance with respect to power, they are adding some complexity, 
-and the onus is now on the programmer to adapt to this change. 
-\item Additional consideration: not all applications require the fastest
-possible performance. Operating points + lesser performing cores
-are a good thing. 
-\end{itemize}
 \paragraph{Core Capabilities}
-\begin{itemize}
-\item 
-What we observe is two things: 
-different kinds of workload perform best on different hardware,
-not all workloads require the same performance characteristics,
-good enough is good enough, most computers have to support a 
-mix of workloads. 
-\item The first makes a distinction between workloads
-which have a lot of ILP to exploit, TLP, or DLP.
-In the case of applications which have lots of ILP and
-are performance sensitive, then they are best run on a fairly complex
-processor. But for applications which alternatively
-have a lot of TLP to use, then are better run
-on simpler processors, because of the non linear 
-relationasihp between completexity and performance, place more cores on chip, 
-increase throuhput overall. 
+Modern architectures make three observations: 1) different workloads,
+or parts of workload perform best on different hardware 2) not all
+workloads have the same performance requirements: some are throughput
+bound, others latency bound, whilst others do not have strong timing requireemnts.
+3) most computers have to support a mix of these workloads.  CITE
 
-Some application pahses might have a large amount of instruction level parallelism (ILP) whcih can be explocited bya core that can issue many instructions per cycle. The same core however might be very inefficeint for an applciaiton pahse with little ILP, consumping singifcanty more power than a simple core that is better matched to the application's characteristics. 
-That means that you can either use simpler
-cores to achieve the same performance, or achieve better performance whilst
-keeping power constant. Wtih regards to DLP, then you have GPUS
-(find memory equation). More generally, ``unconvential cores'' can
-bring some significant memory savings. Demonstrate that having hetogeneous
-(unconvential cores), can yield some huge performance guarantees, and 
-even in the cases where off chip bandwdith is scarce. 
-Custom logic and other low power U cores could potentially be used to
-reduce sequential pwoer consumption or to efficiently 
-imrpove sequential processing performance. First, if the goal is to ahchieve the same level of performance as a baseline system with proecssesos, a U Core can be used to speed up parallel sections of an application while allowing the sequetnail proecssor o slow down with a signifant reduction in power. Antoher perilsyp ropsoed method allwos a pwoer hugnry sequetnial rpecssor to offlado sectiosn of serial code to custom logic. 
-Found that units hardwared to a paritcular data representatio 
-or comptuational algorithm
-can achieve 50 to 500 times grater enery efficency than a general 
-purpose register organsiation. 
-\item The second makes the point that not all applications
-are time critical, it is possible to run them on 
-less powerful hardware for example, this allows you to trade
-power for performance. This has some implications for the OS
-which now needs to know how much is ``good enough'' for the 
-task it is running. Examples include low intensity 
-tasks in mobile phones. Other examlpes include the ability 
-to run a key value store on wimpy nodes ~\cite{andersen2009fawn} (nodes powered
-by a low power CPU), but this is not approaprite for all workloads~\cite{lang2010nonwimpy}.
-Part of the reason there is because of network latency. 
-\item The third observation is that most computers have to run 
-a mix of workloads, tasks which are both throuhgput sensitive
-and latency sensitive for example, tasks which are not time critical,
-tasks which would perform best on a specific type of machine, etc. 
-By adding these compoments to a chip, can precisely match the kind of 
-core that you want. 
-Therefore, in additional to changes in performance over time, sngificnat changes occur int he relative performance of the candidate core.  During serial portions  portions of execution, the chip's powerbudget is appleid toward using a single large core to allow the serila portion toe xecute as quickly as possible. 
-During the parallel portions. the chips power is used more fficently bu runnign the parallel portion on a large number of small area and power efficeitn cores. Thus executing serial portions of an applciation byt relatively inefficient core ande xecution parallel portions of an algorithm on many small cores cna maximise the ratio 
-of performance to pwoer dissipation. 
+\paragraph{} The first category distinguishes between mostly sequential workloads that
+exhibit high levels of instruction-level-parallelism, task parallel code
+with high levels of thread level parallelism, such as computation frameworks
+(ex: MapReduce), and workloads with heavy amounts of data-parallelism (multimedia, gaming workloads). Sequential applications benefit from few, highly powerful cores whereas task parallel code optimises power efficiency by running on a large number of  relatively simple cores. Multimedia/gaming/DSP workloads run best on hardware that can exploit data-level-parallelism, namely vector architectures, GPUs, or cores extended with SIMD instructions. Targeted hardware accelerators also help improve performance of specific parts of a workload (media codecs, cryptography engines, compositing engines) CITE. Mobile phones make 
+heavy use of such accelerators CITE. Similarly, custom logic and FPGAs can be used to pipeline irregular data flows CITE.
+ X et al. groups these specialised cores under the term of unconvential cores. These cores are placed on the chip to maximise power efficency: 
+either by increasing performance whilst keeping the power budget constant,
+or by reducing power consumption whilst maintaining performance. Using specialised hardware over a general architecture was found to improve power efficiecny by 50 to 500 times. CITE. 
+Unconvential cores improve power efficiency through heavy customisation of computational units, of wiring/interconnects, through hardwiring components, and through a more restricted instruction set. The heavily specialised design implies that all of the chip's bower budget can be used in components that directly improve a specific feature. This comes at the expense of generality. This tradeoff is visible even with the choice of unconventional core: custom logic achievesoptimal power efficiency but is expensive and very restrictive. GPUs or FPGAs have more flexibility, at the cost of a higher power footprint.  
 
-\item The implications however is that cores can now have different
-capabilities, so not all tasks can be run on all cores, and as efficiently.
-There's two challenges: find a way to express this core heterogeneity in
-such a way that the OS or the application can understand it, and secondly
-for the OS or the application to understand their workload sufficiently well
-to know what to schedule where, and when (if the workload changes).  
-\end{itemize}
+\paragraph{} Many architectures observe that workloads exhibit different behaviours and have different performance requirements. Some will be CPU intensive and latency sensitive. Others IO bound and optimised for throughput. Most importantly, not all applications are performance critical. Many processor designs
+leverage this insight to design chips which contain cores of differing 
+capabilities. The literature refers to these as performance asymmetric multicores. This allows the processor to better match execution resources to each 
+application's need and address a much wider range of competing workloads, 
+with increased power efficiency. X et al. found that using asymmetric core could improve energy per instruction by four to six times. Workloads which are mostly executed sequentially can be executed on a complex core, whilst parallel workloads can be executed on multiple simple cores. This addresses the issue we previously highlighted with homogeneous simple cores (Ahmdahl's law); that performance is bound by the sequential portion of the application, which suffers if executed on less powerful cores. Asymmetric Multicore Chips can guarantee that sequential performance remains high whilst power consumption can be reduced for highly parallel applications. Similarly, applications vary in their performanc requirements. Examples include workloads which are not latency or throughput sensitive, and can therefore execute on less powerful cores, trading off performance for power, so long as the performance is ``good enough''. Other examples include the FAWN key-value store, which runs on a series of wimpy nodes (nodes powered b a low power CPU)~\cite{andersen2009fawn}. This is however not appropriate for every workload ~\cite{lang2010nonwimpy}.
+Asymmetric multicore chips offers the possibility of large improvements power efficiency, but at the cost of a significant burden on the OS and applications,
+as discussed in the following section. 
 
-\paragraph{Relationship between cores } As the number of cores increases,
-and each core becomes more diverse, the question of the relationship
-between cores becomes more important. 
-\paragraph{Specialisation vs Generality} One of emerging trends
-is that multicore architectures are increasingly being
-specialised for one specific purpose. As previously mentioned,
-large, there are competing metrics, all which must meet certain
-performance requirements, within a power budget. As a result,
-the entire machine architecture is built to precisely 
-fit purpose. The multicore area has significant increase
-the number of dimensions along which computers can be
-designed.The stringent requirements on power have 
- A specialised processor or chip can be more simple, by using more targeted
-hardware. This can lead to power reduction because fewer unnecessary
-compomenets are being used. This can also lead to performance
-improvement because the capacity that's freed up by not using any  unnecessary
-componennts can be used. 
- The stringent requirements
-on power fostered increased coupling between various hardware components.
-X  highlights that, to come up with an optimal solution, all hardware components
-should be codesigned. The shift from maximising performance to maximising performance
-per watt increased specialisation of entire processors (for desktop, mobiles,
-servers, etc.), but also of components within each processor.
-Given such high specialisation for specific domains, the question that we need
-to ask, is how do we program for such devices, how can the software actually 
-reflect that specialisation. 
-Talk aout 10 x 10 rather than 90 x 10 
+\paragraph{} The third observation highlights that 1) most computers are 
+required to support a large mix of workload 2) that within an application, workload characteristics evolve with time, alternating between heavy sequential and heavy parallel parts, computationally intensive sections and IO intensive sections, etc. This, combined with the observation that specialised hardware yields improved power efficiency, has led chip designers to place many of these components onto the same chip. Inter-machine heterogeneity allows processors to provide good performance for a wide range of workload whilst preserving the power savings obtained by using custom hardware.  X et al. refers to this piecewise
+optimisation strategy as 10x10 optimisation, constrasting it with 90x10 optimisation. The latter focuses on making the common case fast, using transistors to improve single threaded performance whilst the former
+seeks to optimise each ``individual 10\% case'' building specialised hardware for each. The 90/10 strategy was predominant in recent years. The onus was on the chip designer to guarantee good perfromance, shielding the devleoper from much of the complexity. Intra-machine heterogeneity reduces power consumption, but shifts much of the responsibility for guarnateeing good performnace on to the programmer. We identify two main challenges: 1) identifying the correct primitives to expose this heterogeneity to the the operating system and applications 2) requiring the programmer to have a thorough understanding of both the undelryin machine architecture and the specific properties of the workload it hopes to execute.  
+
+\paragraph{Specialisation vs Generality} 
+Multicore architectures are increasingly being
+specialised for specific use-cases. The shift away from maximising 
+performance to maximising power efficiency increased 
+the specialisation of entire processors (for desktop, mobiles,
+servers, etc.), but also of components within each processor. This enables further
+performance improvements whilst curbing any power increase. 
+Modern designs can vary along several dimensions and have significantly
+more degrees of freedom than uniprocessors: number of cores, interconnect, 
+homogeneous cores, ISAs, etc. This maximises the available area on chip which
+allows to place more targeted units on the chip,
+whilst minimising the number of unnecessary components, which 
+reduces static and dynamic power consumption. In combination,
+these two properties optimise power efficiency. 
+These stringent requirements encouraged many processors to be custom designed
+(the Cell BE is full custom), make heavy use of hardware specific accelerators CITE. They additionally increased coupling between various hardware components.
+X  highlights that, to come up with an optimal solution, all hardware components should be codesigned.  This specialisation has two consequences: 
+on hardware, the cost of designing a processor is increasing, due 
+to the large number of dimensions and workload variations one needs to account for. 
+Secondly, applications can no longer be designed without a particular architecture in mind. For example,  an unmodified Memcache (written for x86) was found to perform poorly when  running on Tilera based ystems, but a tweaked Memcache (optimised for the TilePro64),  was found to outperform the x86 version by 70\%~\cite{berezecki2011manycore}. The onus is on the programmer to design applications that match the hardware.
+
+
 
 \paragraph{}  These various axis highlight varying degrees of heterogeneity both within
 machines and across machines. Heterogeneity is a natural consequence of 
-trying to maximise performance within a given power budget. It did not arise
-out of choice but rather as the only possible solution for continuing to guarantee good performance for a wide range of workloads. 
+trying to maximise power efficiency. It did not arise out of choice,  but rather as
+the only possible solution to continue improving performance, but with 
+a flat power budget. 
 
 In the remainder of this paper, we survey how applications and operating
 systems deal with internal and external heterogeneity in machines. 

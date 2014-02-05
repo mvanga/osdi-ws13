@@ -10,11 +10,7 @@ operating system and applications have generally
 hidden heterogeneity from developers. Most processors 
 continue to use variants of Linux independent of
 whether they are servers or desktop computers. 
-Whilst modern OSes are NUMA-aware, they are not specialised for the underlying architecture.
-For example, an unmodified Memcache (written for x86) was found to perform poorly when 
-running on Tilera based ystems, but a tweaked Memcache (optimised for the TilePro64), 
-was found to outperform the x86 version by 70\%~\cite{berezecki2011manycore}.
-Inter-machine heterogeneity is thus poorly taken into account. Similarly, 
+Whilst modern OSes are NUMA-aware, they are not specialised for the underlying architecture. Inter-machine heterogeneity is thus poorly taken into account. Similarly, 
 few applications are able to exploit intra-machine
 heterogeneity due to a lack of consistent primitives exposing it. (TODO rephrase)
 
