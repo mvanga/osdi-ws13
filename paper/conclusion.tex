@@ -1,26 +1,13 @@
 \section{Conclusion}
 
-\paragraph{}Multicore processors exhibit significant heterogeneity, through processor or core specialisation, in a bid
-to maximise the performance-power ratio. Our 
-survey of heterogeneity identified a tension :
-whilst computer architecture research increased
-the specialisation of processors and individual cores,
-often at the expense of programmibility, 
-operating system and applications have generally 
-hidden heterogeneity from developers. Most processors 
-continue to use variants of Linux independent of
-whether they are servers or desktop computers. 
-Whilst modern OSes are NUMA-aware, they are not specialised for the underlying architecture. Inter-machine heterogeneity is thus poorly taken into account. Similarly, 
-few applications are able to exploit intra-machine
-heterogeneity due to a lack of consistent primitives exposing it. (TODO rephrase)
+In this paper, we tried to present an overview of modern processor architectures and hardware trends that seem likely as well as identify some of the challenges that developers of system software must overcome.
 
+If we try to distil the major paradigm shifts in computer architecture through the history of computers, we have \emph{(i)} the shift from uniprocessors to multiprocessors, and \emph{(ii)} the shift from symmetric multiprocessors to heterogenous computing platforms. Each of this shifts has resulted in a significant increase in complexity in two key ways. First, it has resulted in a progressively more complex underlying architectures. Second, it has resulted in additional complexity for programmers to reason about.
 
-\paragraph{} Our survey thus suggests that OS and software research should focus on two directions:
-firstly, inter-machine heterogeneity should be better handled by operating systems
-and applications optimised for specific architectures. Secondly, operating 
-systems should expose sound primitives to allow applications to reason about 
-intra-machine heterogeneity. In that sense, Helios~\cite{nightingale2009helios}
- and Barrelfish's System Knowledge Base ~\cite{schupbach08embracingdiversity} are 
-steps in that direction. 
+It is interesting to note that in the initial stages of both paradigm shifts, the goal of the operating system and software stack seems to have been the masking of the additional complexity in order to ease the development of software for these architectures. In the case of multicore architectures, it resulted in the continued programming of multicores through the same primitives as were used in uniprocessor multitasking systems. In the case of heterogenous processors, it has been to mask this heterogeneity and have programmers be oblivious to it when developing system software.
 
+Eventually though, in the first shift towards multicore architectures, the result was the widespread education and adoption of parallel programming techniques by programmers that enabled them to reason about the new dimension of parallelism. This led to optimized software that was built specifically for multicore architectures (\eg MapReduce \cite{mapreduce}).
 
+With regard to the second paradigm shift of increased heterogeneity, we believe that a similar trajectory will follow. Slowly, we will come to understand the tradeoffs involved in these architectures and how they relate to one another, resulting in software that is highly optimized to make the best use of heterogeneous architectures.
+
+Given the large number of dimensions of complexity that the introducion of heterogeneity in modern architectures creates, it is unlikely that operating systems will be able to efficiently dictate policies that satisfy the requirements of a wide range of applications. Instead, we envision systems where operating systems are reduced to providing mechanisms for applications which can then dictate their own policies on resources. (This is similar in spirit to capability-based systems \cite{capabilities}.)
