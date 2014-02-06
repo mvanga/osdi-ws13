@@ -35,9 +35,9 @@ that the operating system needs to considered when executing a task. For example
 \subsection{Modular Operating System Designs}
 
 Due to the possibility of multiple instruction set architectures being present within a
-single machine, each running at a range of different frequencies, a modular approach to building operating systems is required. The most prominent research in this area, which has spawned a multitude of subsequent research, is the idea of a multikernel \cite{Barrelfish} where each core runs a separate kernel and talks with other cores using message passing. Most research kernels in this regard have adopted a minimal microkernel-inspired design.
+single machine, each running at a range of different frequencies, a modular approach to building operating systems is required. The most prominent research in this area, which has spawned a multitude of subsequent research, is the idea of a multikernel~\cite{barrelfish} where each core runs a separate kernel and talks with other cores using message passing. Most research kernels in this regard have adopted a minimal microkernel-inspired design.
 
-While microkernels themselves are not a new concept  \cite{Liedtke, Mach, Amoeba}, it is an almost ubiquitous design decision in multi-core research kernels today (\eg, Barrelfish \cite{Barrelfish, Schupbach08embracingdiversity}, HeliOS \cite{Helios}, fOS \cite{fos}). Essentially, the job of the microkernel is to provide a minimal set of abstractions for programmers to work with, without having to deal with the underlying variations of the hardware.
+While microkernels themselves are not a new concept  \cite{Liedtke, Mach, Amoeba}, it is an almost ubiquitous design decision in multi-core research kernels today (\eg, Barrelfish \cite{barrelfish,Schupbach08embracingdiversity}, HeliOS \cite{Helios}, fOS \cite{fos}). Essentially, the job of the microkernel is to provide a minimal set of abstractions for programmers to work with, without having to deal with the underlying variations of the hardware.
 
 The features that comprise these microkernels typically vary among projects. For example, Barrelfish uses an L4-style microkernel on each core in the system (or islands of cores) while HeliOS uses even smaller \emph{library operating systems} (libOS) on each core, with specialized cores handling the resource management aspects.
 

@@ -1,38 +1,96 @@
 \section{Introduction} 
 
-\paragraph{}Previous years have seen a spectacular increase in 
-performance of processors, thanks to a combination 
-of technology advances, which allowed to place
-more components on a chip, and microarchitectural 
-advances (speculation, out of order execution, etc.)
+\paragraph{} Recent years have the rise of increasingly 
+more powerful uniprocessors, thanks to a combination
+of hardware and micro-architecture improvements. Modern
+uniprocessors have provided a three order of magnitude 
+improvement over the past 20 years~\cite{borkar2011future}. 
+But this trend is coming to an end. Since 2003, single
+processor improvement has dropped to less than 22\% a year.
+Four reasons explain this slow-down~\cite{hennessy2006comparchquantitative}: 
+\begin{enumerate}
+\item Current clock frequencies are close
+to reaching fundamental limits: the majority of the clock cycle is 
+already dominated by clock skew and wire delays. Frequency scaling
+is now sub-linear. Further improvements
+are unlikely~\cite{borkar2011future}.
+\item There is little room left for further
+increasing single-threaded performance. Significant micro-architectural advances
+ allowed for large improvements in performance. Current processors
+are 7.5 times faster than what would have been possible considering
+only technological advances. This was achieved through aggressively
+exploiting instruction-level-parallelism, using very deep pipelines,
+complex branch prediction logic, instruction reordering logic, multiple-issue
+processors etc. 
+We are now reaching the limits of this aggressive speculation. Any 
+further improvements would yield diminishing returns~\cite{Borkar:2007:TCC:1278480.1278667}.
+\item Cost and
+time to market are important factors. Any such improvement would 
+introduce complexity in the design and increase development
+cost significantly. The small improvement in performance that would
+ensue would not make up for the additional design cost~\cite{hennessy2006comparchquantitative}. 
+\item  Current designs have hit a power wall~\cite{FSSP:09}. The power consumption of modern
+uniprocessors is becoming unsustainable. There are two factors that contribute 
+to the power consumption of the CPU: dynamic power consumption
+and transistor leakage currents. Dynamic power is the result
+of the switching on and off of transistors in the processor
+during operation. Increasing clock frequency has a direct
+effect on dynamic power consumption.  Transistor leakage
+currents is due to the current that flows from the differently
+doped parts of a semiconductor. This current is proportional
+to the size of the chip~\cite{Borkar:2007:TCC:1278480.1278667}. 
+\end{enumerate}
 
-\paragraph{}But this trend is now coming to a halt, for four main 
-reasons: 
-1) clock frequencies are reaching fundamental limit
-2) we've used up pretty much all the ILP possible
-3) any further increases would be too costly design wise
-4) power dissipation is becoming the biggest issue. 
+\paragraph{} Any further increase in uniprocessor complexity would yield
+a significant increase in chip complexity/size, for a small increase in performance.
+ This is prohibitive both in terms of cost and power consumption.
+ The scrapping of Intel's Pentium 4Ghz Prescott processor due to 
+unsustainable power consumption exemplifies this trend~\cite{Pentium}.
+To sustain similar performance improvements to those seen in the past two
+decades, but now with the additional constraint of a fixed power
+budget(and as a result, a fixed transistor budget), chip designers are shifting their approach. 
+New computer architectures no longer seek to optimise performance, but power efficiency.
+In doing so, recent processors are leveraging technological advances which allow for integrating multiple chips
+onto a single piece of silicon, each of which further contains multiple cores. 
+These processors exploit data and thread level parallelism at the expense of 
+instruction level parallelism~\cite{Borkar:2007:TCC:1278480.1278667}. Whilst
+this opens up the potential for significant improvement, it
+requires a significant paradigm shift in how we build operating
+systems and applications. 
 
-\paragraph{} So somehow need to find a way to continue improving 
-performance, but with a fixed power budget, and without 
-increasing the clock count. The solution that was
-first used was to exploit a different kind of parallelism
-in applications, namely thread level parallelism. This 
-allowed to place more than one core on the chip (cite),
-giving rise to multicore architectures. But the important thing
-to note is that multicore architectures didn't arrive out of 
-choice, but out of necessity to guarantee power/cost efficiency. 
+\paragraph{} Multicore architectures can improve power efficiency 
+if and only if operating systems and applications are designed
+with parallelism in mind. These architectures arose out of necessity,
+not out of choice, and exposed significantly more complexity to the 
+programmer than previous uniprocessor designs. Many operating systems
+continue to struggle adapting to this new paradigm where
+scalability is essential~\cite{boyd2010analysis}. But, the rise of 
+multicore research operating systems~\cite{fos,barrelfish,Corey},
+slow modifications to the Linux kernel~\cite{dobson2003linux}, and
+the development of programming paradigms~\cite{dean2004mapreduce,openmp08}
+that are expressly parallel, suggest that software is slowly adapting
+to this change. Programmers are beginning to explicitly design
+applications with threading and parallelism in mind.
 
-\paragraph{} The core challenge with multicore architectures for software was two fold:
-1) you have a lot more degrees of freedom with multicores, 
-so lots of inter machine heterogeneity tat applications  now have 
-to account for. 2)  they required
-a significant change in paradigm, otherwise they are completely useless.
+\paragraph{} The necessary shift from unicore to multi-core revolutionised
+much of the hardware and software industry. However, many observe
+that this is not sufficient to guarantee the performance requirements
+industry requires, and modern chips are now no longer simply multi-core
+architectures~\cite{borkar2011future}, but \emph{heterogeneous multi-core architectures}. 
+That is, they contain a wide range of specialised cores, optimised for specific
+purposes. This guarantees optimal power efficiency~\cite{5695539}, but once again introduces significant
+challenges for operating systems and software, which now must take into account
+two additional parameters: 
+\begin{itemize}
+\item \textbf{Inter-Machine Heterogeneity} There are a huge number of combinations that result from the vast range of possible interconnects, possible ISA's, the number and topology of cores, as well as memory architectures. This results in environments where software must support the inter-operability between a multitude of combinations.
+\item \textbf{Intra-Machine Heterogeneity} Within a single machine itself, non-uniform access time to memory, peripheral devices, and other cores (\ie communication between cores), as well as the possibility of multiple ISA's, different interconnects \etc, leads to significant variations of performance characteristics amongst cores.
+\end{itemize}
+As heterogeneity increases, programmability often decreases~\cite{kahle2005cell}. 
+Software is currently in the process of adapting to this
+new evolution in power-efficient computing.  In this paper, we provide a precise 
+description of inter- and intra- machine heterogeneity. We subsequently 
+describe the challenges that software faces as a result, and analyse how, if at all,
+ operating systems have adapted to the advent of heterogeneous multicore computing. 
 
-\paragraph{} As much as designing new architectures,for them to deliver the prmised performance improvements, software had to adapt. It eventually did, and now we happily use threads and paradigms like MapReduce, and, rather than try to mask multicore, happily leverage it.  
 
-\paragraph{} But multicore still didn't deliver sufficient performance improvements whilst keeping the budget constant, so the next step was to introduce intra machine heterogeneity so that tailored componets would coexist on a chip to deliver the best performance for a specific use case. Take it to an extreme.
-This lead to the rise of heteorgenous multicores. What's interesing here, is that its again the same pattern, we're adapting the computation model to gurantee power efficiency. Again, this is not currently well adapted, and existing software models appear to hide it rather than leverage it. The questionis, whether it will follow the same pattern as with multicore, or not. 
-
-In this paper, we suvey both inter and inter machine heterogeneity... 
 

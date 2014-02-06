@@ -25,12 +25,16 @@ concerns of power, performance, programmability.
 
 \subsection{Architecture Overview}
 
-\paragraph{} Modern architectures cluster around three main categories~\cite{Vajda:1414193}: 1) designs with a small number of powerful cores 2) processors with large number of simple, homogeneous cores 3) architectures which explicitly associate cores of varying capabilities and instructions sets. We identify the
-reasoning behind each design decision, focusing on specific examples.
+\paragraph{} Modern architectures cluster around three main categories~\cite{Vajda:1414193}: \begin{enumerate}
+\item designs with a small number of powerful cores 
+\item  processors with large number of simple, homogeneous cores 
+\item architectures which explicitly associate cores of varying capabilities and instructions sets.
+\end{enumerate} We identify the
+reasoning behind each design decision, focussing on specific examples.
 
 
 \subsubsection{Small number of complex high performance cores}
-These are power-hungry processors which optimise sequential execution
+\paragraph{} These are power-hungry processors which optimise sequential execution
 and limited amounts of thread level parallelism. These architectures 
 consist of a small number (2-8) of highly powerful cores on a 
 chip. Cores are mostly homogeneous, fully cache-coherent, with a private cache 
@@ -40,10 +44,10 @@ out-of-order execution, speculation, very deep pipelines, etc. optimising
 single threaded performance. This comes at the expense of high power consumption, 
 (although most designs incorporate some power
 saving techniques)~\cite{Vajda:1414193,Borkar:2007:TCC:1278480.1278667}
-The i7 Intel Core 920~\cite{rotem2012pai} contains 4 cores which aggressively exploit ILP through a four issue, dynamically scheduled 16 stage pipeline, and multilevel branch prediction unit. All cores own
+\paragraph{} The i7 Intel Core 920~\cite{rotem2012pai} contains 4 cores which aggressively exploit ILP through a four issue, dynamically scheduled 16 stage pipeline, and multilevel branch prediction unit. All cores own
  private L1 and L2 caches, and share the L3 cache. They communicate
 through a ring based interconnect. These architectures are
-optimised for desktop computing. Applications have very diverse performance requirements. Cores are highly general to guarantee good performance for all workloads. Optimising for latency requires these cores to be very powerful  and aggressively exploit ILP to guarantee good per thread performance. Applications are mostly designed with uni-processors in mind, by programmers with little knowledge of the underlying hardware. Many applications continue to be mostly sequential. As performance is bound by the sequential parts of an application, 
+optimised for desktop computing, where applications have very diverse performance requirements. Cores are therefore highly general to guarantee good performance for all workloads. Optimising for latency requires these cores to be very powerful  and aggressively exploit ILP to guarantee good per thread performance. Applications are additionally mostly designed with uni-processors in mind, by programmers with little knowledge of the underlying hardware. Many applications continue to be mostly sequential. As performance is bound by the sequential parts of an application, 
 complex cores are required to guarantee good performance.
 Adding more cores simply allows for new optimisations to be explored, namely, 
 thread level parallelism, over the diminishing returns of further exploiting ILP.
@@ -53,7 +57,8 @@ strong memory coherency. This enables developers to continue writing
 the same applications that they previously wrote for uniprocessors.
 
 
-\subsubsection{Large Number of Simple, Low Frequency Cores} An alternative
+\subsubsection{Large Number of Simple, Low Frequency Cores} 
+\paragraph{} An alternative
 design strategy consists in placing a larger number of simpler, lower frequency cores
 onto the chip. These designs optimise both throughput and power at the expense of latency.
 Cores are  usually homogeneous and fully memory coherent~\cite{Vajda:1414193}. These architectures are
@@ -95,7 +100,7 @@ importantly, it provides the ability to scale whilst satisfying a low power budg
 execution on an x86 based processor~\cite{berezecki2011manycore}. 
 
 \subsubsection{Heterogeneous Cores} 
-The first category optimised for 
+\paragraph{} The first category optimised for 
 sequential performance and programmability at the expense of power. The second, 
 for throughput, power and programmability at the expense of sequential performance. 
 Core homogeneity, both in terms of instruction set and capability,
@@ -103,7 +108,7 @@ was key to facilitate application development by users~\cite{balakrishnan2005imp
 of multicore processors, by contrast, explicitly optimises both
 power and performance, at the expense of programmability. They do so in two ways: 
 by associating cores with different capabilities on a chip, and possibly components
-with different ISAs~\cite{kumar:2004:SHM:998680.1006707,5695539,Kumar:2005:HCM:1100859.1100890,5695539,5695539,FSSP:09}. This allows them to run tasks on the core
+with different ISAs~\cite{kumar:2004:SHM:998680.1006707,5695539,Kumar:2005:HCM:1100859.1100890,FSSP:09}. This allows them to run tasks on the core
 that is best suited for that workload. Appropriately scheduling each 
 task on the appropriate core complicates the task of the OS scheduler.
 Programming for multiple ISAs increases the complexity of a developer's code~\cite{McIlroy:2010:HRS:1869459.1869478}. 
@@ -159,7 +164,7 @@ complex cores for a large number of simple ones. Big.Little, by contrast, attemp
 
 \subsection{Identified trade-offs}
 
-The previous section gave an overview of the main types of multicore systems, 
+\paragraph{} The previous section gave an overview of the main types of multicore systems, 
 and motivated their design choices with respect to their target use case.
 We expand on the major trade-offs observed and discuss current research efforts in the area, focussing specifically on inter-machine and intra-machine heterogeneity as a mechanism
 to optimise power efficiency. 
@@ -214,7 +219,7 @@ Pollacks's Law~\cite{borkar2011future}& $ Speedup \propto Complexity^{2}$ and  $
 
 \end{table*}
 
-The optimal number of cores and their respective 
+\paragraph{} The optimal number of cores and their respective 
 performance is thus heavily workload dependent. As processors are increasingly becoming specialised for specific applications, they are likely to strike different points in that spectrum, 
 increasing inter-machine heterogeneity. Similarly,
 developers have to adapt applications to match 
@@ -228,7 +233,7 @@ between architectures and applications.
 or parts of workload perform best on different hardware~\cite{5695539}2) not all
 workloads have the same performance requirements: some are throughput
 bound, others latency bound, whilst others do not have strong timing requirements.~\cite{greenhalgh2011biglittle}
-3) most computers have to support a mix of these workloads~\cite{Kumar:2004:SHM:998680.1006707}
+3) most computers have to support a mixof these workloads~\cite{Kumar:2004:SHM:998680.1006707}.
 
 \paragraph{} The first category distinguishes between mostly sequential workloads that exhibit high levels of instruction-level-parallelism, task parallel code with high levels of thread level parallelism, such as computation frameworks
 (ex: MapReduce~\cite{dean2004mapreduce}), and workloads with heavy amounts of data-parallelism (multimedia, gaming workloads). Sequential applications benefit from few, highly powerful cores whereas task parallel code optimises power efficiency by running on a large number of relatively simple cores~\cite{Kumar:2005:HCM:1100859.1100890}. Multimedia/gaming/DSP workloads run best on hardware that can exploit data-level-parallelism, namely vector architectures, GPUs, or cores extended with SIMD instructions~\cite{Rossbach:2013:DCR:2517349.2522715}. Targeted hardware accelerators also help improve performance of specific parts of a workload (media codecs, cryptography engines, compositing engines)\cite{borkar2011future}. Mobile phones make 
@@ -241,7 +246,7 @@ Unconventional cores improve power efficiency through heavy customisation of com
 \paragraph{} Many architectures observe that workloads exhibit different behaviours and have different performance requirements~\cite{greenhalgh2011biglittle}. Some will be CPU intensive and latency sensitive. Others IO bound and optimised for throughput. Most importantly, not all applications are performance critical. Many processor designs
 leverage this insight to design chips which contain cores of differing 
 capabilities. The literature refers to these as performance asymmetric multicores~\cite{balakrishnan2005impactperfasym}. This allows the processor to better match execution resources to each  application's need and address a much wider range of competing workloads, 
-with increased power efficiency. Borkar et al. ~\cite{borkar2011future} found that using asymmetric core could improve energy per instruction by four to six times. Firstly, it strikes a tradeoff between single-thread and parallel performance. Workloads which are mostly executed sequentially can be executed on a complex core, whilst parallel workloads can be executed on multiple simple cores. This core asymmetry addresses the effects of Ahmdahl's law: that performance is bound by the sequential portion of the application, which suffers if executed on less powerful cores. Asymmetric Multicore Chips can guarantee that sequential performance remains high whilst power consumption can be reduced for highly parallel applications. Secondly, it leverages the flexibility that some applications have with regards to performance. Examples include workloads which are not latency or throughput sensitive, and can therefore execute on less powerful cores, trading off performance for power, so long as the performance is ``good enough''. Other examples include the FAWN key-value store, which runs on a series of wimpy nodes (nodes powered by a low power CPU)~\cite{andersen2009fawn}. This is however not appropriate for every workload ~\cite{lang2010nonwimpy}.
+with increased power efficiency. Borkar et al. ~\cite{borkar2011future} found that using asymmetric core could improve energy per instruction by four to six times. Firstly, it strikes a tradeoff between single-thread and parallel performance. Workloads which are mostly executed sequentially can be executed on a complex core, whilst parallel workloads can be executed on multiple simple cores. This core asymmetry addresses the effects of Ahmdahl's law: that performance is bound by the sequential portion of the application, which suffers if executed on less powerful cores~\cite{4563876}. Asymmetric Multicore Chips can guarantee that sequential performance remains high whilst power consumption can be reduced for highly parallel applications. Secondly, it leverages the flexibility that some applications have with regards to performance. Examples include workloads which are not latency or throughput sensitive, and can therefore execute on less powerful cores, trading off performance for power, so long as the performance is ``good enough''. Other examples include the FAWN key-value store, which runs on a series of wimpy nodes (nodes powered by a low power CPU)~\cite{andersen2009fawn}. This is however not appropriate for every workload ~\cite{lang2010nonwimpy}.
 Asymmetric multicore chips offers the possibility of large improvements power efficiency, but at the cost of a significant burden on the OS and applications to correctly reason about and exploit this intra-machine heterogeneity. 
 
 \paragraph{} The third observation highlights that 1) most computers are 
@@ -250,7 +255,7 @@ optimisation strategy as 10x10 optimisation, constrasting it with 90x10 optimisa
 seeks to optimise each ``individual 10\% case'' building specialised hardware for each. The 90/10 strategy had been predominant in recent years. The onus was on the chip designer to guarantee good perfromance, shielding the developer fro much of the complexity. Intra-machine heterogeneity reduces power consumption, but shifts much of the responsibility for guarnateeing good performnace on to the programmer~\cite{Schupbach08embracingdiversity}. We identify two main challenges: 1) identifying the correct primitives to expose this heterogeneity to the the operating system and applications 2) requiring the programmer to have a thorough understanding of both the undelryin machine architecture and the specific properties of the workload it hopes to execute.  
 
 \subsubsection{Specialisation vs Generality} 
- Modern designs can vary along several dimensions and have significantly
+\paragraph{} Modern designs can vary along several dimensions and have significantly
 more degrees of freedom than uniprocessors: number of cores, interconnect, 
 homogeneous/heterogeneous cores, ISAs, etc. The shift from maximising 
 performance to maximising power efficiency has increased
@@ -263,7 +268,9 @@ with unnecessary features, maximising performance and reducing
 power consumption~\cite{borkar2011future}.  
 These stringent requirements encouraged many processors to be custom designed
 (the Cell BE is full custom), make heavy use of hardware specific accelerators \cite{kahle2005cell}. They additionally increased coupling between various hardware components.
-Kumar~\cite{1431574} highlights that, to come up with an optimal solution, all hardware components should be codesigned.  This specialisation has two consequences: 
+Kumar~\cite{1431574} highlights that, to come up with an optimal solution, all hardware components should be codesigned.  
+
+\paragraph{} This specialisation has two consequences: 
 on hardware, the cost of designing a processor is increasing, due 
 to the large number of dimensions and workload variations one needs to account for. 
 Secondly, applications can no longer be designed without a particular architecture in mind ; an unmodified Memcache (written for x86) was found to perform poorly when  running on Tilera based ystems, but a tweaked Memcache (optimised for the TilePro64),  was found to outperform the x86 version by 70\%~\cite{berezecki2011manycore}. The onus is on the programmer to design applications that match the hardware.
