@@ -1,1 +1,38 @@
-section
+\section{Introduction} 
+
+\paragraph{}Previous years have seen a spectacular increase in 
+performance of processors, thanks to a combination 
+of technology advances, which allowed to place
+more components on a chip, and microarchitectural 
+advances (speculation, out of order execution, etc.)
+
+\paragraph{}But this trend is now coming to a halt, for four main 
+reasons: 
+1) clock frequencies are reaching fundamental limit
+2) we've used up pretty much all the ILP possible
+3) any further increases would be too costly design wise
+4) power dissipation is becoming the biggest issue. 
+
+\paragraph{} So somehow need to find a way to continue improving 
+performance, but with a fixed power budget, and without 
+increasing the clock count. The solution that was
+first used was to exploit a different kind of parallelism
+in applications, namely thread level parallelism. This 
+allowed to place more than one core on the chip (cite),
+giving rise to multicore architectures. But the important thing
+to note is that multicore architectures didn't arrive out of 
+choice, but out of necessity to guarantee power/cost efficiency. 
+
+\paragraph{} The core challenge with multicore architectures for software was two fold:
+1) you have a lot more degrees of freedom with multicores, 
+so lots of inter machine heterogeneity tat applications  now have 
+to account for. 2)  they required
+a significant change in paradigm, otherwise they are completely useless.
+
+\paragraph{} As much as designing new architectures,for them to deliver the prmised performance improvements, software had to adapt. It eventually did, and now we happily use threads and paradigms like MapReduce, and, rather than try to mask multicore, happily leverage it.  
+
+\paragraph{} But multicore still didn't deliver sufficient performance improvements whilst keeping the budget constant, so the next step was to introduce intra machine heterogeneity so that tailored componets would coexist on a chip to deliver the best performance for a specific use case. Take it to an extreme.
+This lead to the rise of heteorgenous multicores. What's interesing here, is that its again the same pattern, we're adapting the computation model to gurantee power efficiency. Again, this is not currently well adapted, and existing software models appear to hide it rather than leverage it. The questionis, whether it will follow the same pattern as with multicore, or not. 
+
+In this paper, we suvey both inter and inter machine heterogeneity... 
+
