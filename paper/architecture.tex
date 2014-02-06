@@ -29,7 +29,7 @@ concerns of power, performance, programmability.
 reasoning behind each design decision, focusing on specific examples.
 
 
-\paragraph{Small number of complex high performance cores}
+\subsubsection{Small number of complex high performance cores}
 These are power-hungry processors which optimise sequential execution
 and limited amounts of thread level parallelism. These architectures 
 consist of a small number (2-8) of highly powerful cores on a 
@@ -53,7 +53,7 @@ strong memory coherency. This enables developers to continue writing
 the same applications that they previously wrote for uniprocessors.
 
 
-\paragraph{Large Number of Simple, Low Frequency Cores} An alternative
+\subsubsection{Large Number of Simple, Low Frequency Cores} An alternative
 design strategy consists in placing a larger number of simpler, lower frequency cores
 onto the chip. These designs optimise both throughput and power at the expense of latency.
 Cores are  usually homogeneous and fully memory coherent~\cite{Vajda:1414193}. These architectures are
@@ -94,7 +94,8 @@ importantly, it provides the ability to scale whilst satisfying a low power budg
 67\% higher throughput, whilst using 3 times less power than the corresponding
 execution on an x86 based processor~\cite{berezecki2011manycore}. 
 
-\paragraph{Heterogeneous Cores} The first category optimised for 
+\subsubsection{Heterogeneous Cores} 
+The first category optimised for 
 sequential performance and programmability at the expense of power. The second, 
 for throughput, power and programmability at the expense of sequential performance. 
 Core homogeneity, both in terms of instruction set and capability,
@@ -163,9 +164,9 @@ and motivated their design choices with respect to their target use case.
 We expand on the major trade-offs observed and discuss current research efforts in the area, focussing specifically on inter-machine and intra-machine heterogeneity as a mechanism
 to optimise power efficiency. 
 
-\paragraph{Core Performance and Number of Cores}
+\subsubsection{Core Performance and Number of Cores}
 
-Powerful and complex cores guarantee good sequential performance
+\paragraph{} Powerful and complex cores guarantee good sequential performance
 through aggressively exploiting instruction level parallelism,
 and high clock frequency~\cite{4563876}. This requires complex hardware:
 deeper pipelines, multi-level branch prediction units, etc. ~\cite{hennessy2006comparchquantitative,Vajda:1414193} and has implications both in terms of power consumption
@@ -193,7 +194,7 @@ A larger number of simpler cores enables further power saving techniques, as pow
 Each processor can be turned on or off (processor gating), and run at its own
 optimised supply voltage and frequency to match processor utilisation ~\cite{Borkar:2007:TCC:1278480.1278667}. 
 
-Computer architectures which make this trade-off rely on one core assumption: that the workloads they process are sufficiently parallelisable and geared towards throughput rather than latency~\cite{FSSP:09}.
+\paragraph{} Computer architectures that make this trade-off rely on one core assumption: that the workloads they process are sufficiently parallelisable and geared towards throughput rather than latency~\cite{FSSP:09}.
 Indeed, Ahmdahl's law states that speedup as the number of cores increase
 is bound by the sequential part of the application~\cite{4563876}. If the application  is mostly sequential, the speedup will be small. As increasing the number of  cores comes at the price of decreasing clock frequency, the sequential
 parts of the application will perform worse than when using complex cores, penalising latency
@@ -222,8 +223,8 @@ with low power. The rise of inter-machine heterogeneity
 due to power constraints introduces significant interdependence
 between architectures and applications. 
 
-\paragraph{Core Capabilities}
-Modern architectures make three observations: 1) different workloads,
+\subsubsection{Core Capabilities}
+\paragraph{} Modern architectures make three observations: 1) different workloads,
 or parts of workload perform best on different hardware~\cite{5695539}2) not all
 workloads have the same performance requirements: some are throughput
 bound, others latency bound, whilst others do not have strong timing requirements.~\cite{greenhalgh2011biglittle}
@@ -248,7 +249,7 @@ required to support a large mix of workload 2) that within an application, workl
 optimisation strategy as 10x10 optimisation, constrasting it with 90x10 optimisation. The latter focuses on making the common case fast, using transistors to improve single threaded performance whilst the former
 seeks to optimise each ``individual 10\% case'' building specialised hardware for each. The 90/10 strategy had been predominant in recent years. The onus was on the chip designer to guarantee good perfromance, shielding the developer fro much of the complexity. Intra-machine heterogeneity reduces power consumption, but shifts much of the responsibility for guarnateeing good performnace on to the programmer~\cite{Schupbach08embracingdiversity}. We identify two main challenges: 1) identifying the correct primitives to expose this heterogeneity to the the operating system and applications 2) requiring the programmer to have a thorough understanding of both the undelryin machine architecture and the specific properties of the workload it hopes to execute.  
 
-\paragraph{Specialisation vs Generality} 
+\subsubsection{Specialisation vs Generality} 
  Modern designs can vary along several dimensions and have significantly
 more degrees of freedom than uniprocessors: number of cores, interconnect, 
 homogeneous/heterogeneous cores, ISAs, etc. The shift from maximising 
